@@ -1,0 +1,48 @@
+<!-- @dsCard group="Overview" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design brief — three directions</title>
+<style>
+  :root {
+    --bg: #fbfbf9; --ink: #1b1c1e; --muted: #6b6e73; --line: #e3e2dd; --accent: #2743e3;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Georgia, 'Times New Roman', serif; padding: 3rem 2rem; }
+  main { max-width: 46rem; margin: 0 auto; }
+  h1 { font: 700 1.7rem/1.2 ui-monospace, Consolas, monospace; letter-spacing: -0.02em; }
+  h2 { font: 700 1.05rem/1.3 ui-monospace, Consolas, monospace; margin-top: 2.5rem; }
+  .k { font: 0.78rem ui-monospace, Consolas, monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.95rem; }
+  td, th { border-top: 1px solid var(--line); padding: 0.6rem 0.75rem 0.6rem 0; text-align: left; vertical-align: top; }
+  th { font: 700 0.78rem ui-monospace, Consolas, monospace; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .a { color: var(--accent); }
+  p.note { color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+<main>
+  <p class="k">serhiykucherenko.dev — design exploration · July 2026</p>
+  <h1>Three directions, one site</h1>
+  <p>Agreed strategy: fast minimal foundation, one or two signature interactive moments, a dual-entrance landing (clients one door, engineers the other), a lab with embedded demos plus an index of deployed apps, giscus comments on articles.</p>
+  <p>Each board renders its direction live: hover, move the cursor, drag things. The copy is real. The signature moment on each board is the actual proposed one, not a placeholder.</p>
+
+  <h2>How they differ</h2>
+  <table>
+    <tr><th></th><th>A — Wire</th><th>B — Rulebook</th><th>C — Signal</th></tr>
+    <tr><td class="k">World</td><td>The terminal where the debugging happened</td><td>The SEPA spec document, annotated by hand</td><td>A workbench with well-made toys on it</td></tr>
+    <tr><td class="k">Ground</td><td>Dark ink, amber phosphor</td><td>Paper, archival ink, stamp red</td><td>Cool daylight, ultramarine + signal orange</td></tr>
+    <tr><td class="k">Signature moment</td><td>Landing boots like a status log; glyph field reacts to cursor</td><td>Margin annotations appear as you read, like a reviewed spec</td><td>Physics: a draggable badge with real spring, cards that tilt</td></tr>
+    <tr><td class="k">Dual entrance</td><td>Two commands</td><td>Two ledger columns</td><td>Two big honest buttons</td></tr>
+    <tr><td class="k">Risk</td><td>Reads "hacker" if overdone</td><td>Reads dry if the annotations don't land</td><td>Closest to the soda-can energy; must stay precise, not cute</td></tr>
+  </table>
+
+  <h2>What stays constant in all three</h2>
+  <p>Static Astro output, Lighthouse ≥95, system or self-hosted fonts only, both color themes in production (boards commit to one world each for clarity), no tracking, content readable in one click. The signature moment degrades gracefully: with JS off or <span class="a">prefers-reduced-motion</span>, every page is still a complete, fast document.</p>
+
+  <p class="note">Pick a direction, or point at pieces: "A's landing, B's article page" is a legitimate answer.</p>
+</main>
+</body>
+</html>

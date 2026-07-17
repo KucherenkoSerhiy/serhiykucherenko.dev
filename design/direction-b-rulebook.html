@@ -1,0 +1,177 @@
+<!-- @dsCard group="Direction B — Rulebook" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction B — Rulebook</title>
+<style>
+  :root {
+    --paper: #fcfcfa;
+    --ink: #191813;
+    --faint: #6e6a5e;
+    --line: #d9d6cc;
+    --blue: #0b3d91;      /* archival ledger blue */
+    --stamp: #b3372b;     /* rubber-stamp red */
+    --serif: Charter, Georgia, 'Times New Roman', serif;
+    --cond: 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+    --mono: ui-monospace, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.65 var(--serif); }
+  .board { max-width: 72rem; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+  .board-label { font: 0.72rem var(--mono); color: var(--faint); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.4rem; }
+  .board h1 { font: 700 2rem/1.1 var(--cond); text-transform: uppercase; letter-spacing: 0.02em; margin: 0 0 0.3rem; }
+  .thesis { color: var(--faint); max-width: 44rem; margin-bottom: 2.5rem; }
+  .frame { border: 1px solid var(--line); background: #fff; margin: 1rem 0 3rem; box-shadow: 0 1px 3px rgba(25,24,19,0.06); }
+  .frame-cap { font: 0.72rem var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--faint); margin-top: 2.5rem; }
+
+  /* ---------- landing mock ---------- */
+  .landing { padding: 2rem 3rem 3rem; position: relative; }
+  .l-top { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--ink); padding-bottom: 0.75rem; }
+  .l-top .brand { font: 700 1rem var(--cond); text-transform: uppercase; letter-spacing: 0.05em; }
+  .l-top nav { display: flex; gap: 1.5rem; font: 0.8rem var(--mono); }
+  .l-top nav a { color: var(--ink); text-decoration: none; }
+  .l-top nav a:hover { color: var(--blue); }
+  .doc-id { font: 0.72rem var(--mono); color: var(--faint); display: flex; justify-content: space-between; padding: 0.5rem 0 2rem; }
+  .headline { font: 700 clamp(2.2rem, 5vw, 3.4rem)/1.02 var(--cond); text-transform: uppercase; max-width: 30ch; margin: 0 0 1rem; }
+  .headline .blue { color: var(--blue); }
+  .lede { max-width: 56ch; margin: 0 0 2.5rem; }
+
+  .stamp { position: absolute; top: 7.5rem; right: 3rem; transform: rotate(6deg); border: 3px double var(--stamp); color: var(--stamp); font: 700 0.85rem/1.25 var(--cond); text-transform: uppercase; letter-spacing: 0.08em; padding: 0.5rem 0.9rem; text-align: center; opacity: 0.85; user-select: none; }
+  @media (max-width: 720px) { .stamp { position: static; display: inline-block; margin-bottom: 1.5rem; } }
+
+  .ledger { display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--ink); }
+  @media (max-width: 720px) { .ledger { grid-template-columns: 1fr; } }
+  .col { padding: 1.5rem 1.75rem 1.75rem 0; }
+  .col + .col { border-left: 1px solid var(--line); padding-left: 1.75rem; padding-right: 0; }
+  .col .att { font: 0.72rem var(--mono); color: var(--blue); letter-spacing: 0.08em; }
+  .col h3 { font: 700 1.35rem var(--cond); text-transform: uppercase; margin: 0.25rem 0 0.6rem; }
+  .col p { margin: 0 0 1rem; color: #33322b; font-size: 0.95rem; }
+  .col a.go { font: 0.85rem var(--mono); color: var(--blue); text-decoration: none; border-bottom: 1px solid var(--blue); }
+  .col a.go:hover { color: var(--stamp); border-color: var(--stamp); }
+
+  /* annotation: appears on hover of annotated spans */
+  .anno { border-bottom: 1px dashed var(--stamp); cursor: help; position: relative; }
+  .anno .note { position: absolute; left: 0; bottom: 130%; width: 24ch; background: #fff; border: 1px solid var(--stamp); color: var(--stamp); font: italic 0.8rem/1.4 var(--serif); padding: 0.5rem 0.6rem; transform: rotate(-1.2deg); opacity: 0; pointer-events: none; transition: opacity 0.18s; box-shadow: 2px 2px 0 rgba(179,55,43,0.12); z-index: 2; }
+  .anno:hover .note { opacity: 1; }
+
+  /* ---------- article fragment ---------- */
+  .article { display: grid; grid-template-columns: 1fr 15rem; gap: 2rem; padding: 2.5rem 3rem; }
+  @media (max-width: 800px) { .article { grid-template-columns: 1fr; } }
+  .article h2 { font: 700 1.6rem/1.1 var(--cond); text-transform: uppercase; margin: 0 0 0.25rem; }
+  .article .meta { font: 0.72rem var(--mono); color: var(--faint); margin-bottom: 1.25rem; }
+  .article p { margin: 0 0 1rem; max-width: 62ch; }
+  .margin-note { font: italic 0.85rem/1.5 var(--serif); color: var(--stamp); border-left: 2px solid var(--stamp); padding-left: 0.9rem; align-self: start; transform: rotate(-0.4deg); }
+  .margin-note .who { font: 0.68rem var(--mono); font-style: normal; color: var(--faint); display: block; margin-top: 0.4rem; }
+
+  /* ---------- lab row ---------- */
+  .specrow { display: grid; grid-template-columns: 8rem 1fr 10rem 8rem; gap: 1rem; padding: 0.9rem 3rem; border-top: 1px solid var(--line); font-size: 0.95rem; align-items: baseline; }
+  .specrow:first-child { border-top: none; }
+  .specrow .id { font: 0.75rem var(--mono); color: var(--blue); }
+  .specrow .name { font: 700 1rem var(--cond); text-transform: uppercase; }
+  .specrow .st { font: 0.72rem var(--mono); }
+  .specrow .st.live { color: #2c6e2c; }
+  .specrow .st.wip { color: var(--stamp); }
+  .specrow a { font: 0.8rem var(--mono); color: var(--blue); }
+  .specrow .desc { color: #33322b; font-size: 0.9rem; }
+
+  /* ---------- tokens ---------- */
+  .tokens { display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: flex-start; margin-top: 1rem; }
+  .chips { display: flex; gap: 0.6rem; }
+  .chip { width: 64px; }
+  .chip i { display: block; height: 44px; border: 1px solid var(--line); }
+  .chip span { font: 0.68rem var(--mono); color: var(--faint); }
+  .ramp .d1 { font: 700 1.8rem var(--cond); text-transform: uppercase; }
+  .ramp .d2 { font: 1rem var(--serif); }
+  .ramp .d3 { font: 0.72rem var(--mono); color: var(--faint); letter-spacing: 0.08em; }
+  .rationale { color: var(--faint); font-size: 0.9rem; max-width: 44rem; }
+  .rationale em { color: var(--ink); font-style: normal; }
+</style>
+</head>
+<body>
+<div class="board">
+  <p class="board-label">Direction B</p>
+  <h1>Rulebook</h1>
+  <p class="thesis">The visual language of the documents he works with: SEPA rulebooks, ISO 20022 attribute tables, condensed uppercase headings, archival blue, and one rebellious element, the red hand of the engineer annotating the spec. Hover the dashed-underlined phrases and the article margin. Production adds a dark "reading-lamp" theme.</p>
+
+  <p class="frame-cap">Landing — dual entrance as a ledger spread · hover the dashed phrases</p>
+  <div class="frame">
+    <div class="landing">
+      <div class="l-top">
+        <span class="brand">Serhiy Kucherenko</span>
+        <nav><a href="#">blog</a><a href="#">lab</a><a href="#">projects</a><a href="#">◐</a></nav>
+      </div>
+      <div class="doc-id"><span>Doc: SK-2026-001 · Personal rulebook, v2</span><span>Applies from: 2026-07-17</span></div>
+      <div class="stamp">Open to<br>freelance<br>· 2026 ·</div>
+      <h2 class="headline">Payment systems engineer, <span class="blue">now teaching machines to cite their sources</span></h2>
+      <p class="lede">Nine years across banking infrastructure, travel, medical and industrial domains. Currently building <span class="anno">AI systems from scratch<span class="note">no frameworks; raw API, own retriever, own eval harness</span></span>: evals, citations, <span class="anno">all of it<span class="note">yes, including the boring parts. especially those.</span></span>.</p>
+      <div class="ledger">
+        <div class="col">
+          <span class="att">AT-01 / ENGAGEMENT</span>
+          <h3>Hire me</h3>
+          <p>RAG systems that cite pages, not vibes. LLM cost control. Backend .NET that banks trust.</p>
+          <a class="go" href="#">Read the terms →</a>
+        </div>
+        <div class="col">
+          <span class="att">AT-02 / LABORATORY</span>
+          <h3>See the lab</h3>
+          <p>Live demos, experiments in progress, and the occasional thing built purely because it was fun.</p>
+          <a class="go" href="#">Enter the lab →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="frame-cap">Article page fragment — the margin is where comments live (giscus renders as margin notes)</p>
+  <div class="frame">
+    <div class="article">
+      <div>
+        <h2>The localhost trap</h2>
+        <p class="meta">Art. 1 · 2026-07-17 · first published on LinkedIn · 14 margin notes</p>
+        <p>Every question in the app took about 15 seconds. The model was fast. Retrieval was fast. Ten of those seconds were hiding somewhere else, and for days I couldn't say where.</p>
+        <p>For days I told myself it was just slow on Windows. Docker overhead, antivirus, something environmental, whatever. I checked the model latency three times before I thought to check the connection.</p>
+      </div>
+      <aside class="margin-note">
+        "The LLM had a good alibi" is going straight into our team's incident vocabulary.
+        <span class="who">— @dev-reader, via GitHub</span>
+      </aside>
+    </div>
+  </div>
+
+  <p class="frame-cap">Lab index — projects as attribute rows</p>
+  <div class="frame">
+    <div class="specrow">
+      <span class="id">LAB-001</span>
+      <div><span class="name">payments-rag</span><div class="desc">Ask the SEPA rulebooks a question, get the page cited back.</div></div>
+      <span class="st live">STATUS: LIVE</span>
+      <a href="#">demo ↗</a>
+    </div>
+    <div class="specrow">
+      <span class="id">LAB-002</span>
+      <div><span class="name">llm-cost-gateway</span><div class="desc">Semantic caching, spend tracking, budget alerts between app and provider.</div></div>
+      <span class="st wip">STATUS: SCOPING</span>
+      <a href="#">notes ↗</a>
+    </div>
+  </div>
+
+  <p class="frame-cap">Tokens</p>
+  <div class="tokens">
+    <div class="chips">
+      <div class="chip"><i style="background:#fcfcfa"></i><span>paper</span></div>
+      <div class="chip"><i style="background:#191813"></i><span>ink</span></div>
+      <div class="chip"><i style="background:#0b3d91"></i><span>blue</span></div>
+      <div class="chip"><i style="background:#b3372b"></i><span>stamp</span></div>
+      <div class="chip"><i style="background:#d9d6cc"></i><span>line</span></div>
+    </div>
+    <div class="ramp">
+      <div class="d1">Display — condensed caps</div>
+      <div class="d2">Body — Charter/Georgia serif, 16px</div>
+      <div class="d3">META — MONO, LETTER-SPACED</div>
+    </div>
+  </div>
+  <p class="frame-cap">Rationale</p>
+  <p class="rationale">Nobody else's portfolio looks like a payment rulebook, which is exactly the point: it's <em>his</em> material. The dry document form sets up the joke, the red annotations deliver it. Comments-as-margin-notes turns giscus from a bolted-on widget into the identity. In production the condensed display face is self-hosted (e.g. an open grotesque condensed) rather than Arial Narrow.</p>
+</div>
+</body>
+</html>

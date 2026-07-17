@@ -1,0 +1,217 @@
+<!-- @dsCard group="Direction A — Wire" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction A — Wire</title>
+<style>
+  :root {
+    --ink: #0c0e11;        /* blue-black ground */
+    --panel: #12151a;
+    --line: #232830;
+    --amber: #ffb454;      /* phosphor amber, the one accent */
+    --amber-dim: #8a6a3d;
+    --fg: #d6d9de;
+    --dim: #7d848e;
+    --ok: #7fbf7f;
+    --mono: ui-monospace, 'Cascadia Code', Consolas, 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ink); color: var(--fg); font: 15px/1.65 var(--mono); }
+  .board { max-width: 72rem; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+  .board-label { color: var(--dim); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; margin-bottom: 0.4rem; }
+  .board h1 { font-size: 1.5rem; margin: 0 0 0.3rem; color: #fff; letter-spacing: -0.01em; }
+  .thesis { color: var(--dim); max-width: 44rem; margin-bottom: 2.5rem; }
+  .frame { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin: 1rem 0 3rem; }
+  .frame-cap { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); margin-top: 2.5rem; }
+
+  /* ---------- landing mock ---------- */
+  .landing { position: relative; background: var(--ink); min-height: 560px; overflow: hidden; }
+  .landing canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .landing-inner { position: relative; padding: 2rem 3rem 3rem; max-width: 46rem; }
+  .l-nav { display: flex; gap: 2rem; padding-bottom: 2.5rem; font-size: 0.85rem; }
+  .l-nav .brand { color: var(--amber); }
+  .l-nav a { color: var(--dim); text-decoration: none; }
+  .l-nav a:hover { color: var(--fg); }
+  .log { white-space: pre-wrap; font-size: 0.95rem; min-height: 13.5em; }
+  .log .p { color: var(--dim); }
+  .log .amber { color: var(--amber); }
+  .log .ok { color: var(--ok); }
+  .log .cursor { display: inline-block; width: 0.6em; height: 1.1em; background: var(--amber); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .doors { display: flex; gap: 1.25rem; margin-top: 2.25rem; flex-wrap: wrap; }
+  .door { flex: 1 1 16rem; border: 1px solid var(--line); border-radius: 4px; padding: 0.9rem 1.25rem; text-decoration: none; color: var(--fg); background: rgba(18,21,26,0.85); transition: border-color 0.15s, transform 0.15s; }
+  .door:hover { border-color: var(--amber); transform: translateY(-2px); }
+  .door .cmd { color: var(--amber); }
+  .door .sub { display: block; color: var(--dim); font-size: 0.78rem; margin-top: 0.2rem; }
+
+  /* ---------- fragments row ---------- */
+  .frags { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; }
+  @media (max-width: 800px) { .frags { grid-template-columns: 1fr; } }
+  .frag { border: 1px solid var(--line); border-radius: 6px; background: var(--panel); padding: 1.5rem; }
+  .frag h3 { margin: 0 0 1rem; font-size: 0.72rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 400; }
+  .post { padding: 0.85rem 0; border-top: 1px solid var(--line); }
+  .post a { color: var(--fg); text-decoration: none; }
+  .post a:hover { color: var(--amber); }
+  .post .meta { color: var(--dim); font-size: 0.78rem; display: flex; gap: 1em; margin-top: 0.25em; }
+  .post .meta .n { color: var(--amber-dim); }
+
+  .labcard { border: 1px solid var(--line); border-radius: 4px; padding: 1.1rem; margin-top: 0.5rem; }
+  .labcard .status { font-size: 0.72rem; color: var(--ok); }
+  .labcard .status.wip { color: var(--amber); }
+  .labcard h4 { margin: 0.3rem 0 0.4rem; font-size: 1rem; color: #fff; font-weight: 700; }
+  .labcard p { margin: 0; color: var(--dim); font-size: 0.85rem; }
+  .labcard .demo { display: inline-block; margin-top: 0.7rem; color: var(--amber); text-decoration: none; font-size: 0.85rem; }
+  .labcard .demo:hover { text-decoration: underline; }
+
+  /* ---------- tokens ---------- */
+  .tokens { display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: flex-start; margin-top: 1rem; }
+  .chips { display: flex; gap: 0.6rem; }
+  .chip { width: 64px; }
+  .chip i { display: block; height: 44px; border-radius: 4px; border: 1px solid var(--line); }
+  .chip span { font-size: 0.68rem; color: var(--dim); }
+  .ramp div:nth-child(1) { font-size: 1.6rem; color: #fff; font-weight: 700; }
+  .ramp div:nth-child(2) { font-size: 0.95rem; }
+  .ramp div:nth-child(3) { font-size: 0.78rem; color: var(--dim); }
+  .rationale { color: var(--dim); font-size: 0.85rem; max-width: 44rem; }
+  .rationale em { color: var(--fg); font-style: normal; }
+</style>
+</head>
+<body>
+<div class="board">
+  <p class="board-label">Direction A</p>
+  <h1>Wire</h1>
+  <p class="thesis">The site is the terminal where the work actually happens. One typeface, one accent, dark ink. The landing boots like a status log; a field of dim glyphs wakes up near your cursor. Wow through restraint plus one live surface. Production gets a paper-light theme as well; amber survives on both grounds.</p>
+
+  <p class="frame-cap">Landing — dual entrance as two commands · move your cursor over it</p>
+  <div class="frame">
+    <div class="landing" id="landing">
+      <canvas id="field"></canvas>
+      <div class="landing-inner">
+        <nav class="l-nav">
+          <span class="brand">serhiykucherenko.dev</span>
+          <a href="#">blog</a><a href="#">lab</a><a href="#">projects</a>
+        </nav>
+        <div class="log" id="log"></div>
+        <div class="doors">
+          <a class="door" href="#"><span class="cmd">&gt; hire --freelance</span><span class="sub">rag systems · llm cost control · backend .net</span></a>
+          <a class="door" href="#"><span class="cmd">&gt; cd lab/</span><span class="sub">experiments, demos, things that fizz</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frags">
+    <div class="frag">
+      <h3>Blog index fragment — per-stage timers as metadata</h3>
+      <div class="post">
+        <a href="#">The localhost trap: a 10-second database connection on Windows</a>
+        <div class="meta"><span>2026-07-17</span><span class="n">10,137 ms → 27 ms</span><span>14 comments</span></div>
+      </div>
+      <div class="post">
+        <a href="#">Why my RAG cites page numbers, not vibes</a>
+        <div class="meta"><span>2026-07-24</span><span class="n">golden set: 42 questions</span><span>—</span></div>
+      </div>
+      <div class="post">
+        <a href="#">Cross-model judging: Claude grades GPT, GPT grades Claude</a>
+        <div class="meta"><span>2026-07-31</span><span class="n">agreement: measured, not assumed</span><span>—</span></div>
+      </div>
+    </div>
+    <div class="frag">
+      <h3>Lab cards</h3>
+      <div class="labcard">
+        <span class="status">● live</span>
+        <h4>payments-rag</h4>
+        <p>Ask the SEPA rulebooks a question, get the page cited back.</p>
+        <a class="demo" href="#">run demo →</a>
+      </div>
+      <div class="labcard">
+        <span class="status wip">◐ scoping</span>
+        <h4>llm-cost-gateway</h4>
+        <p>Semantic caching, spend tracking, budget alerts between app and provider.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="frame-cap">Tokens</p>
+  <div class="tokens">
+    <div class="chips">
+      <div class="chip"><i style="background:#0c0e11"></i><span>ink</span></div>
+      <div class="chip"><i style="background:#12151a"></i><span>panel</span></div>
+      <div class="chip"><i style="background:#ffb454"></i><span>amber</span></div>
+      <div class="chip"><i style="background:#d6d9de"></i><span>fg</span></div>
+      <div class="chip"><i style="background:#7fbf7f"></i><span>ok</span></div>
+    </div>
+    <div class="ramp">
+      <div>Heading — mono 700</div>
+      <div>Body — mono 400, 15px, 1.65</div>
+      <div>META — MONO CAPS, DIM</div>
+    </div>
+  </div>
+  <p class="frame-cap">Rationale</p>
+  <p class="rationale">The localhost-trap article is a story about a log line revealing the truth; this direction makes that the identity. Numbers do the talking (<em>10,137 ms → 27 ms</em> is better marketing than any adjective). Single accent keeps it calm. With JS off, the hero is plain text and everything still works.</p>
+</div>
+
+<script>
+  // Glyph field: dim characters that wake near the cursor.
+  const canvas = document.getElementById('field');
+  const landing = document.getElementById('landing');
+  const ctx = canvas.getContext('2d');
+  const CHARS = '01<>{}[]:.·pacs008AT41sepa'.split('');
+  let cols = 0, rows = 0, cell = 22, glyphs = [];
+  let mx = -9999, my = -9999;
+  function resize() {
+    canvas.width = landing.clientWidth; canvas.height = landing.clientHeight;
+    cols = Math.ceil(canvas.width / cell); rows = Math.ceil(canvas.height / cell);
+    glyphs = [];
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++)
+      glyphs.push({ x: c * cell + 6, y: r * cell + 16, ch: CHARS[(Math.random() * CHARS.length) | 0] });
+  }
+  resize();
+  addEventListener('resize', resize);
+  landing.addEventListener('pointermove', e => {
+    const b = landing.getBoundingClientRect(); mx = e.clientX - b.left; my = e.clientY - b.top;
+  });
+  landing.addEventListener('pointerleave', () => { mx = my = -9999; });
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '13px ui-monospace, Consolas, monospace';
+    for (const g of glyphs) {
+      const d = Math.hypot(g.x - mx, g.y - my);
+      const a = Math.max(0.045, 0.5 - d / 260);
+      ctx.fillStyle = d < 130 ? `rgba(255,180,84,${a})` : `rgba(125,132,142,${a})`;
+      ctx.fillText(g.ch, g.x, g.y);
+      if (!reduced && d < 130 && Math.random() < 0.03) g.ch = CHARS[(Math.random() * CHARS.length) | 0];
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  // Boot log: types itself once.
+  const LINES = [
+    ['p', '$ serhiy --status'],
+    ['',  'engineer   fullstack, 9y: banking · travel · medical · industrial'],
+    ['',  'now        building AI systems from scratch: evals, citations, all of it'],
+    ['ok', 'shipped    payments-rag        rag over SEPA rulebooks, page-cited'],
+    ['amber', 'scoping    llm-cost-gateway    caching · spend tracking · alerts'],
+    ['',  'writing    one article, every friday'],
+    ['ok', 'open_to    freelance work'],
+  ];
+  const log = document.getElementById('log');
+  let li = 0, chI = 0, out = '';
+  function type() {
+    if (li >= LINES.length) { log.innerHTML = out + '<span class="cursor"></span>'; return; }
+    const [cls, text] = LINES[li];
+    if (chI === 0 && cls) out += `<span class="${cls}">`;
+    out += text[chI] === '<' ? '&lt;' : text[chI];
+    chI++;
+    if (chI >= text.length) { if (cls) out += '</span>'; out += '\n'; li++; chI = 0; }
+    log.innerHTML = out + '<span class="cursor"></span>';
+    setTimeout(type, reduced ? 0 : (chI === 0 ? 90 : 8));
+  }
+  type();
+</script>
+</body>
+</html>

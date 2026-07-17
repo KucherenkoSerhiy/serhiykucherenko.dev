@@ -1,0 +1,210 @@
+<!-- @dsCard group="Direction C — Signal" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction C — Signal</title>
+<style>
+  :root {
+    --day: #eef2f4;         /* cool daylight ground */
+    --card: #ffffff;
+    --ink: #17222b;
+    --dim: #5d6b76;
+    --ultra: #2743e3;       /* ultramarine */
+    --pop: #ff5c1f;         /* signal orange, rationed */
+    --line: #d7dee3;
+    --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: ui-monospace, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--day); color: var(--ink); font: 16px/1.6 var(--sans); }
+  .board { max-width: 72rem; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+  .board-label { font: 0.72rem var(--mono); color: var(--dim); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.4rem; }
+  .board h1 { font: 800 2rem/1.1 var(--sans); letter-spacing: -0.03em; margin: 0 0 0.3rem; }
+  .thesis { color: var(--dim); max-width: 44rem; margin-bottom: 2.5rem; }
+  .frame { border: 1px solid var(--line); border-radius: 10px; background: var(--card); overflow: hidden; margin: 1rem 0 3rem; }
+  .frame-cap { font: 0.72rem var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); margin-top: 2.5rem; }
+
+  /* ---------- landing ---------- */
+  .landing { padding: 2rem 3rem 3rem; position: relative; overflow: hidden; min-height: 520px; }
+  .l-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
+  .l-nav .brand { font: 700 0.95rem var(--mono); }
+  .l-nav .links { display: flex; gap: 1.5rem; font-size: 0.9rem; }
+  .l-nav a { color: var(--ink); text-decoration: none; border-bottom: 2px solid transparent; }
+  .l-nav a:hover { border-color: var(--pop); }
+  .hello { font: 800 clamp(2.4rem, 5.5vw, 3.6rem)/1.03 var(--sans); letter-spacing: -0.035em; max-width: 24ch; margin: 0 0 1.25rem; }
+  .hello .u { color: var(--ultra); }
+  .sub { color: var(--dim); max-width: 52ch; margin-bottom: 2.5rem; }
+  .doors { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  .doorc { flex: 1 1 16rem; border: 1.5px solid var(--ink); border-radius: 12px; padding: 1.4rem 1.5rem; background: var(--card); text-decoration: none; color: var(--ink); transition: transform 0.12s ease-out, box-shadow 0.12s ease-out; will-change: transform; }
+  .doorc:hover { box-shadow: 0 10px 24px rgba(23,34,43,0.12); }
+  .doorc h3 { margin: 0 0 0.35rem; font: 700 1.2rem var(--sans); letter-spacing: -0.02em; }
+  .doorc p { margin: 0; color: var(--dim); font-size: 0.9rem; }
+  .doorc .tag { display: inline-block; font: 0.7rem var(--mono); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem; padding: 0.2em 0.6em; border-radius: 999px; }
+  .doorc.hire .tag { background: var(--ultra); color: #fff; }
+  .doorc.lab .tag { background: var(--pop); color: #fff; }
+
+  /* the badge: draggable, springs back */
+  .badge { position: absolute; top: 6.5rem; right: 3.5rem; width: 118px; height: 118px; border-radius: 50%; background: var(--ultra); color: #fff; display: grid; place-items: center; text-align: center; font: 700 0.72rem/1.35 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; cursor: grab; user-select: none; touch-action: none; box-shadow: 0 8px 20px rgba(39,67,227,0.35); will-change: transform; }
+  .badge:active { cursor: grabbing; }
+  .badge b { display: block; font-size: 0.95rem; letter-spacing: 0; }
+  @media (max-width: 720px) { .badge { display: none; } }
+
+  /* ---------- blog fragment ---------- */
+  .bloglist { padding: 1.5rem 3rem 2rem; }
+  .bpost { display: flex; justify-content: space-between; gap: 2rem; align-items: baseline; padding: 1rem 0; border-top: 1px solid var(--line); }
+  .bpost:first-child { border-top: none; }
+  .bpost a { color: var(--ink); text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
+  .bpost a:hover { color: var(--ultra); }
+  .bpost .when { font: 0.78rem var(--mono); color: var(--dim); white-space: nowrap; }
+  .bpost .cmt { font: 0.78rem var(--mono); color: var(--pop); white-space: nowrap; }
+
+  /* ---------- lab cards ---------- */
+  .labgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; padding: 1.5rem 3rem 2rem; }
+  @media (max-width: 720px) { .labgrid { grid-template-columns: 1fr; } }
+  .lcard { border: 1.5px solid var(--line); border-radius: 12px; padding: 1.4rem; transition: transform 0.15s ease-out, border-color 0.15s; transform-style: preserve-3d; }
+  .lcard:hover { border-color: var(--ultra); }
+  .lcard .st { font: 0.7rem var(--mono); text-transform: uppercase; letter-spacing: 0.1em; }
+  .lcard .st.live { color: #178745; }
+  .lcard .st.wip { color: var(--pop); }
+  .lcard h4 { margin: 0.4rem 0 0.4rem; font: 700 1.15rem var(--sans); letter-spacing: -0.02em; }
+  .lcard p { margin: 0; color: var(--dim); font-size: 0.9rem; }
+  .lcard .go { display: inline-block; margin-top: 0.8rem; font: 600 0.85rem var(--sans); color: var(--ultra); text-decoration: none; }
+
+  /* ---------- tokens ---------- */
+  .tokens { display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: flex-start; margin-top: 1rem; }
+  .chips { display: flex; gap: 0.6rem; }
+  .chip { width: 64px; }
+  .chip i { display: block; height: 44px; border-radius: 8px; border: 1px solid var(--line); }
+  .chip span { font: 0.68rem var(--mono); color: var(--dim); }
+  .ramp .d1 { font: 800 1.8rem var(--sans); letter-spacing: -0.03em; }
+  .ramp .d2 { font: 1rem var(--sans); }
+  .ramp .d3 { font: 0.72rem var(--mono); color: var(--dim); letter-spacing: 0.1em; }
+  .rationale { color: var(--dim); font-size: 0.9rem; max-width: 44rem; }
+  .rationale em { color: var(--ink); font-style: normal; }
+</style>
+</head>
+<body>
+<div class="board">
+  <p class="board-label">Direction C</p>
+  <h1>Signal</h1>
+  <p class="thesis">A workbench in daylight: calm cool ground, ultramarine for structure, signal orange strictly for "this is alive". The wow is physics you can feel: drag the round badge and let go; tilt the lab cards. This is the direction the asmr soda can would one day live in without changing anything. Production adds a night theme on the same tokens.</p>
+
+  <p class="frame-cap">Landing — drag the badge, hover the doors</p>
+  <div class="frame">
+    <div class="landing" id="landing">
+      <nav class="l-nav">
+        <span class="brand">serhiykucherenko.dev</span>
+        <span class="links"><a href="#">blog</a><a href="#">lab</a><a href="#">projects</a><a href="#">◐</a></span>
+      </nav>
+      <div class="badge" id="badge">payments ·<br><b>rag · evals</b>ship friday</div>
+      <h2 class="hello">Serhiy builds systems that <span class="u">show their work</span>.</h2>
+      <p class="sub">Senior fullstack engineer, 9 years across banking, travel, medical and industrial software. Now building AI systems from scratch: evals, citations, all of it.</p>
+      <div class="doors">
+        <a class="doorc hire" href="#">
+          <span class="tag">for clients</span>
+          <h3>Something needs building</h3>
+          <p>RAG with real citations, LLM cost control, backend .NET. Freelance, remote.</p>
+        </a>
+        <a class="doorc lab" href="#">
+          <span class="tag">for the curious</span>
+          <h3>See what's on the bench</h3>
+          <p>Live demos, experiments, and articles about what broke on the way.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <p class="frame-cap">Blog index fragment</p>
+  <div class="frame">
+    <div class="bloglist">
+      <div class="bpost"><a href="#">The localhost trap: a 10-second database connection on Windows</a><span class="cmt">14 comments</span><span class="when">Jul 17</span></div>
+      <div class="bpost"><a href="#">Why my RAG cites page numbers, not vibes</a><span class="cmt"></span><span class="when">Jul 24</span></div>
+      <div class="bpost"><a href="#">Cross-model judging: Claude grades GPT, GPT grades Claude</a><span class="cmt"></span><span class="when">Jul 31</span></div>
+    </div>
+  </div>
+
+  <p class="frame-cap">Lab cards — tilt on hover</p>
+  <div class="frame">
+    <div class="labgrid">
+      <div class="lcard" data-tilt>
+        <span class="st live">● live demo</span>
+        <h4>payments-rag</h4>
+        <p>Ask the SEPA rulebooks a question, get the page cited back. Runs against the real corpus.</p>
+        <a class="go" href="#">Try it →</a>
+      </div>
+      <div class="lcard" data-tilt>
+        <span class="st wip">◐ scoping</span>
+        <h4>llm-cost-gateway</h4>
+        <p>Semantic caching, spend tracking and budget alerts between your app and the LLM providers.</p>
+        <a class="go" href="#">Follow along →</a>
+      </div>
+    </div>
+  </div>
+
+  <p class="frame-cap">Tokens</p>
+  <div class="tokens">
+    <div class="chips">
+      <div class="chip"><i style="background:#eef2f4"></i><span>day</span></div>
+      <div class="chip"><i style="background:#17222b"></i><span>ink</span></div>
+      <div class="chip"><i style="background:#2743e3"></i><span>ultra</span></div>
+      <div class="chip"><i style="background:#ff5c1f"></i><span>pop</span></div>
+      <div class="chip"><i style="background:#ffffff"></i><span>card</span></div>
+    </div>
+    <div class="ramp">
+      <div class="d1">Display — 800, tight</div>
+      <div class="d2">Body — system sans, 16px</div>
+      <div class="d3">LABELS — MONO CAPS</div>
+    </div>
+  </div>
+  <p class="frame-cap">Rationale</p>
+  <p class="rationale">Friendliest of the three, and the most future-proof for playful lab work: spring physics is the house material, so every new toy (soda can included) inherits the same feel. Orange means <em>alive right now</em> and nothing else; if everything glows, nothing does. All motion honors prefers-reduced-motion and no third-party JS is involved.</p>
+</div>
+
+<script>
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Draggable badge with spring-back.
+  const badge = document.getElementById('badge');
+  if (badge) {
+    let dragging = false, sx = 0, sy = 0, x = 0, y = 0, vx = 0, vy = 0, raf;
+    badge.addEventListener('pointerdown', e => {
+      dragging = true; badge.setPointerCapture(e.pointerId);
+      sx = e.clientX - x; sy = e.clientY - y; cancelAnimationFrame(raf);
+    });
+    badge.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      x = e.clientX - sx; y = e.clientY - sy;
+      badge.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    const release = () => {
+      if (!dragging) return; dragging = false;
+      if (reduced) { x = y = 0; badge.style.transform = ''; return; }
+      const spring = () => {
+        vx += -x * 0.12; vy += -y * 0.12; vx *= 0.82; vy *= 0.82; x += vx; y += vy;
+        badge.style.transform = `translate(${x}px, ${y}px) rotate(${vx * 0.6}deg)`;
+        if (Math.abs(x) + Math.abs(y) + Math.abs(vx) + Math.abs(vy) > 0.5) raf = requestAnimationFrame(spring);
+        else { x = y = vx = vy = 0; badge.style.transform = ''; }
+      };
+      raf = requestAnimationFrame(spring);
+    };
+    badge.addEventListener('pointerup', release);
+    badge.addEventListener('pointercancel', release);
+  }
+
+  // Tilt cards toward the cursor.
+  if (!reduced) {
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+      card.addEventListener('pointermove', e => {
+        const b = card.getBoundingClientRect();
+        const px = (e.clientX - b.left) / b.width - 0.5;
+        const py = (e.clientY - b.top) / b.height - 0.5;
+        card.style.transform = `perspective(600px) rotateY(${px * 6}deg) rotateX(${-py * 6}deg)`;
+      });
+      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+    });
+  }
+</script>
+</body>
+</html>

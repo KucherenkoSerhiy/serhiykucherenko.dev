@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import { SITE_TITLE, SITE_URL, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  type?: string;
+}
+
+const { title, description = SITE_DESCRIPTION, canonicalUrl, type = 'website' } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE_TITLE}` : SITE_TITLE;
+const canonical = canonicalUrl ?? new URL(Astro.url.pathname, SITE_URL).href;
+const currentPath = Astro.url.pathname;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, SITE_URL).href} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <script is:inline>
+      const stored = localStorage.getItem('theme');
+      if (stored) document.documentElement.dataset.theme = stored;
+    </script>
+  </head>
+  <body>
+    <header class="site">
+      <a class="brand" href="/">serhiykucherenko.dev</a>
+      <nav>
+        <a href="/blog/" aria-current={currentPath.startsWith('/blog') ? 'page' : undefined}>blog</a>
+        <a href="/projects/" aria-current={currentPath.startsWith('/projects') ? 'page' : undefined}>projects</a>
+        <button id="theme-toggle" aria-label="Toggle dark mode">◐</button>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site">
+      <a href={GITHUB_URL}>GitHub</a> ·
+      <a href={LINKEDIN_URL}>LinkedIn</a> ·
+      <a href={`mailto:${EMAIL}`}>Email</a> ·
+      <a href="/rss.xml">RSS</a>
+    </footer>
+    <script is:inline>
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        const root = document.documentElement;
+        const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        const current = root.dataset.theme ?? (prefersDark ? 'dark' : 'light');
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        localStorage.setItem('theme', next);
+      });
+    </script>
+  </body>
+</html>

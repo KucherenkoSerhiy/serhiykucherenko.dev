@@ -1,0 +1,89 @@
+---
+title: "The localhost trap: a 10-second database connection on Windows"
+description: "A per-stage timer and a health check turned a days-long mystery into a one-word fix."
+pubDate: 2026-07-17
+tags: [windows, docker, postgres, ipv6, debugging, observability]
+# canonicalUrl: <LinkedIn Article URL — add after the Friday publish, see README>
+---
+
+Every question in the app took about 15 seconds. The model was fast. Retrieval was fast. Ten of those seconds were hiding somewhere else, and for days I couldn't say where.
+
+The app is payments-rag, a RAG system I built over the SEPA payment rulebooks. You ask a question in plain English, it retrieves the relevant passages from Postgres + pgvector, sends them to Claude, and returns an answer with the exact rulebook page cited. Fast is not a goal; under 5 seconds is. On my Windows machine it was taking three times that, every single query, and the answers were correct, which somehow made it worse. Correct but slow doesn't scream "bug." It whispers "maybe that's just how it is."
+
+For days I told myself it was just slow on Windows. Docker overhead, antivirus, something environmental, whatever. I checked the model latency three times before I thought to check the connection. That was the wrong order, and it cost me the better part of a week.
+
+There's a reason this class of bug survives. An LLM app carries a built-in excuse: models are slow, everyone knows models are slow, so a 15-second answer doesn't trigger the same alarm a 15-second SQL query would. The LLM had a good alibi for the slowness. I believed it too early.
+
+## Measuring instead of guessing
+
+Two cheap pieces of observability ended the mystery in minutes.
+
+The first was a per-stage timer. I split each request into connect, retrieval, and generation, and logged the breakdown on every answer. The line read:
+
+```
+retrieval 2.1s · generation 3.4s · connect + overhead 10.2s
+```
+
+Retrieval plus generation was about 5.5 seconds. The other ten were sitting around the database connection, not in the model, not in the vector search.
+
+The second was a health check: a small panel that pings each dependency and shows the round-trip time. For the database it read:
+
+```
+DB reachable · 10137 ms
+```
+
+Unambiguous. The connection itself took 10.1 seconds. Not the query, not the embedding, the TCP connect. The bug had been there for days behind a vague "it's just slow." The moment we measured, it took one screenshot to locate.
+
+## What was actually happening
+
+The connection string said `localhost`. That one word triggered a chain of events.
+
+On Windows, `localhost` is dual-stack: it resolves to both IPv6 `::1` and IPv4 `127.0.0.1`, and the OS prefers IPv6. So the Postgres client first tried to connect to `::1:5433`.
+
+Nothing was listening there. The Postgres in this setup runs in Docker, and the published port was bound on IPv4 only. The IPv4 loopback answers; `::1` does not.
+
+And because no `connect_timeout` was set, the client sat on the dead IPv6 route until the OS gave up on its own schedule and retried over IPv4. That giving-up takes about 10 seconds. Then the IPv4 connection succeeds in milliseconds, the query runs fine, and the answer comes back correct. Every query paid the toll again.
+
+Three things had to line up to make it hurt:
+
+- `localhost` is dual-stack, and Windows tries IPv6 first.
+- Docker published the container port on IPv4 only, so there was nothing on `::1` to answer.
+- No `connect_timeout`, so instead of failing fast and loud, the client waited out the full OS-level fallback on every single connection.
+
+Remove any one of the three and the problem disappears, which is exactly why it survived for days. On Linux and macOS colleagues' setups the same code was quick.
+
+## The fix
+
+One word. `localhost` becomes `127.0.0.1`, which skips DNS ambiguity entirely and goes straight to the IPv4 loopback that Docker actually publishes:
+
+```bash
+# .env
+DATABASE_URL=postgresql://user:pass@127.0.0.1:5433/mydb
+```
+
+And a timeout, so this class of bug can never hide as a silent hang again:
+
+```python
+psycopg.connect(DATABASE_URL, connect_timeout=10)
+```
+
+A hang is worse than an error. An error tells you where it hurts; a hang just eats your latency budget and says nothing.
+
+The before and after:
+
+| host | connect latency |
+|---|---|
+| `localhost` (IPv6 detour) | 10,137 ms |
+| `127.0.0.1` (direct IPv4) | 27 ms |
+
+About 375× faster, one word changed.
+
+One caveat so nobody over-applies this: the trap needs the specific combination above. Windows resolution order, a container port published on IPv4 only, no connect timeout. If your stack differs, your ten seconds are hiding somewhere else.
+
+## What I keep from this
+
+1. `localhost` is not `127.0.0.1` once IPv6 is in play. For a container whose port is mapped to IPv4, prefer the literal address; it behaves identically on Linux and macOS, where loopback is loopback anyway.
+2. Always set a connect timeout. Fail fast and loud.
+3. Cheap observability pays for itself. A per-stage timer and a one-line health check are maybe an hour of work combined, and they turned a multi-day "it's just slow" into a five-minute fix.
+
+The per-stage timer and the health check both stayed in the project permanently. They've earned their place: the same health view now checks all five dependencies on demand and every 10 minutes, so the next silent hang, wherever it comes from, gets a number attached to it before it gets a story.

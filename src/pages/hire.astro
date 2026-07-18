@@ -3,14 +3,34 @@ import Base from '../layouts/Base.astro';
 import { EMAIL, GITHUB_URL } from '../consts';
 ---
 
-<Base title="Work with me" description="Freelance: RAG systems with real citations, LLM cost control, backend .NET.">
+<Base title="Work with me" description="Freelance: auditable RAG systems, LLM cost control, backend .NET that holds.">
   <h1>Work with me</h1>
-  <p>I take freelance work in three areas:</p>
-  <ul>
-    <li><strong>RAG systems</strong> that cite pages, not vibes: retrieval, evals, and the plumbing between them.</li>
-    <li><strong>LLM cost control</strong>: caching, spend tracking, knowing what a feature actually costs.</li>
-    <li><strong>Backend .NET</strong>: nine years of it, much of that in banking infrastructure.</li>
-  </ul>
+  <!-- TODO: portrait photo goes here when Serhiy provides one:
+       <img class="portrait" src="/portrait.jpg" alt="Serhiy Kucherenko" width="112" height="112" /> -->
+  <p>Three problems I take on:</p>
+
+  <h2>Your AI answers need to be auditable</h2>
+  <p>
+    RAG that cites the exact page, and evals that catch regressions before your users do. I
+    built <a href="https://github.com/KucherenkoSerhiy/payments-rag">payments-rag</a> this
+    way: every answer carries its source, and a cross-model judge grades the output.
+  </p>
+
+  <h2>Your LLM bill needs to stop surprising you</h2>
+  <p>
+    Caching, spend tracking, and knowing what a feature costs per request before finance
+    asks. I'm building a gateway for exactly this problem, in the open.
+  </p>
+
+  <h2>Your .NET backend needs to hold</h2>
+  <p>
+    Nine years of it, much of that in banking infrastructure, where "mostly works" doesn't
+    count as working.
+  </p>
+
+  <p>
+    How I work, in one story: <a href="/blog/localhost-trap/">a 10-second mystery, measured down to a one-word fix</a>&#32;(10,137 ms → 27 ms).
+  </p>
   <p>
     How it starts: you write me a paragraph about the problem. If I can help, we talk. If I
     can't, I say so and, when I can, point you at someone who can.
@@ -19,3 +39,12 @@ import { EMAIL, GITHUB_URL } from '../consts';
     <a href={`mailto:${EMAIL}`}>{EMAIL}</a> · <a href={GITHUB_URL}>the code speaks too</a>
   </p>
 </Base>
+
+<style>
+  .portrait {
+    float: right;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    margin: 0 0 1rem 1.5rem;
+  }
+</style>

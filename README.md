@@ -35,6 +35,7 @@ Cloudflare Pages, connected to this repo. Build command `npm run build`, output 
 
 ## Pending TODOs
 
+- Add a portrait photo as `public/portrait.jpg` and uncomment the img in `src/pages/hire.astro`.
 - Set the real LinkedIn profile URL in `src/consts.ts`.
 - Add `canonicalUrl` to `src/content/blog/localhost-trap.mdx` once the LinkedIn article is live.
 - Add the payments-rag live demo URL in `src/pages/projects.astro` when it deploys.

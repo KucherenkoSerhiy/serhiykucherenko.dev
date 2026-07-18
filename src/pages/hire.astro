@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { EMAIL, GITHUB_URL } from '../consts';
+---
+
+<Base title="Work with me" description="Freelance: RAG systems with real citations, LLM cost control, backend .NET.">
+  <h1>Work with me</h1>
+  <p>I take freelance work in three areas:</p>
+  <ul>
+    <li><strong>RAG systems</strong> that cite pages, not vibes: retrieval, evals, and the plumbing between them.</li>
+    <li><strong>LLM cost control</strong>: caching, spend tracking, knowing what a feature actually costs.</li>
+    <li><strong>Backend .NET</strong>: nine years of it, much of that in banking infrastructure.</li>
+  </ul>
+  <p>
+    How it starts: you write me a paragraph about the problem. If I can help, we talk. If I
+    can't, I say so and, when I can, point you at someone who can.
+  </p>
+  <p>
+    <a href={`mailto:${EMAIL}`}>{EMAIL}</a> · <a href={GITHUB_URL}>the code speaks too</a>
+  </p>
+</Base>

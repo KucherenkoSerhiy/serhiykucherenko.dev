@@ -15,7 +15,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
         <li>
           <a href={`/blog/${post.id}/`}>{post.data.title}</a>
           <span class="meta">
-            {post.data.pubDate.toISOString().slice(0, 10)} · {post.data.description}
+            <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
+            {post.data.metric && <span class="n">{post.data.metric}</span>}
+            <span>{post.data.description}</span>
           </span>
         </li>
       ))

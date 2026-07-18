@@ -25,6 +25,7 @@ const currentPath = Astro.url.pathname;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#0c0e11" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
@@ -34,8 +35,7 @@ const currentPath = Astro.url.pathname;
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <script is:inline>
-      const stored = localStorage.getItem('theme');
-      if (stored) document.documentElement.dataset.theme = stored;
+      if (localStorage.getItem('theme') === 'light') document.documentElement.dataset.theme = 'light';
     </script>
   </head>
   <body>
@@ -43,8 +43,9 @@ const currentPath = Astro.url.pathname;
       <a class="brand" href="/">serhiykucherenko.dev</a>
       <nav>
         <a href="/blog/" aria-current={currentPath.startsWith('/blog') ? 'page' : undefined}>blog</a>
+        <a href="/lab/" aria-current={currentPath.startsWith('/lab') ? 'page' : undefined}>lab</a>
         <a href="/projects/" aria-current={currentPath.startsWith('/projects') ? 'page' : undefined}>projects</a>
-        <button id="theme-toggle" aria-label="Toggle dark mode">◐</button>
+        <button id="theme-toggle" aria-label="Toggle light mode">◐</button>
       </nav>
     </header>
     <main>
@@ -59,10 +60,9 @@ const currentPath = Astro.url.pathname;
     <script is:inline>
       document.getElementById('theme-toggle').addEventListener('click', () => {
         const root = document.documentElement;
-        const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
-        const current = root.dataset.theme ?? (prefersDark ? 'dark' : 'light');
-        const next = current === 'dark' ? 'light' : 'dark';
-        root.dataset.theme = next;
+        const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+        if (next === 'light') root.dataset.theme = 'light';
+        else delete root.dataset.theme;
         localStorage.setItem('theme', next);
       });
     </script>

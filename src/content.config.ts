@@ -11,6 +11,8 @@ const blog = defineCollection({
     // Used for posts first published on LinkedIn.
     canonicalUrl: z.string().url().optional(),
     tags: z.array(z.string()).default([]),
+    // One number that tells the story, shown in post lists ("10,137 ms -> 27 ms").
+    metric: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Comments from '../../components/Comments.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -17,6 +18,19 @@ const { Content } = await render(post);
   canonicalUrl={post.data.canonicalUrl}
   type="article"
 >
+  <script
+    type="application/ld+json"
+    slot="head"
+    is:inline
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      description: post.data.description,
+      datePublished: post.data.pubDate.toISOString().slice(0, 10),
+      author: { '@type': 'Person', name: 'Serhiy Kucherenko', url: 'https://serhiykucherenko.dev' },
+    })}
+  />
   <article>
     <h1>{post.data.title}</h1>
     <p class="meta">
@@ -25,4 +39,5 @@ const { Content } = await render(post);
     </p>
     <Content />
   </article>
+  <Comments />
 </Base>

@@ -8,6 +8,20 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 ---
 
 <Base>
+  <script
+    type="application/ld+json"
+    slot="head"
+    is:inline
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Serhiy Kucherenko',
+      url: 'https://serhiykucherenko.dev',
+      jobTitle: 'Senior fullstack engineer',
+      knowsAbout: ['RAG systems', 'LLM evaluation', 'SEPA payments', 'ISO 20022', '.NET', 'Python'],
+      sameAs: ['https://github.com/KucherenkoSerhiy'],
+    })}
+  />
   <section class="hero">
     <canvas id="field" aria-hidden="true"></canvas>
     <div class="hero-inner">

@@ -2,14 +2,11 @@
 
 Everything below needs your accounts, your face, or your judgment. Each item says exactly what to do and what unblocks. Do them in any order, on any energy level; none is urgent-urgent.
 
-## 1. Connect Cloudflare (Workers flow) (~3 min, unblocks: the site being live)
+## ~~1. Connect Cloudflare~~ DONE 2026-07-19
 
-In progress 2026-07-19. Repo connected via "Create application" → Workers Git import.
-Settings: project name `serhiykucherenko-dev` (no dots allowed), build command
-`npm run build`, deploy command `npx wrangler deploy` (config lives in `wrangler.jsonc`).
-After first deploy: project → Settings → Domains & Routes → add `serhiykucherenko.dev`.
-
-Every push to `main` auto-deploys after this. Tell Fable when done: production verification + Lighthouse run on the live URL is on me.
+Live at https://serhiykucherenko.dev (+ www). Worker `serhiykucherenko-dev`, Git-connected:
+every push to `main` builds (`npm run build`) and deploys (`npx wrangler deploy`,
+config in `wrangler.jsonc`). Production Lighthouse: 100/100/100/100.
 
 ## 2. LinkedIn canonical URL for article 01 (~1 min, unblocks: correct SEO for the first post)
 

@@ -2,12 +2,12 @@
 
 Everything below needs your accounts, your face, or your judgment. Each item says exactly what to do and what unblocks. Do them in any order, on any energy level; none is urgent-urgent.
 
-## 1. Connect Cloudflare Pages (~3 min, unblocks: the site being live)
+## 1. Connect Cloudflare (Workers flow) (~3 min, unblocks: the site being live)
 
-1. dash.cloudflare.com → Workers & Pages → Create → Pages → "Connect to Git".
-2. Pick the `serhiykucherenko.dev` repo.
-3. Build command: `npm run build` · Output directory: `dist` (framework preset "Astro" fills these).
-4. After first deploy: Custom domains → add `serhiykucherenko.dev` (one click, domain is already in your account).
+In progress 2026-07-19. Repo connected via "Create application" → Workers Git import.
+Settings: project name `serhiykucherenko-dev` (no dots allowed), build command
+`npm run build`, deploy command `npx wrangler deploy` (config lives in `wrangler.jsonc`).
+After first deploy: project → Settings → Domains & Routes → add `serhiykucherenko.dev`.
 
 Every push to `main` auto-deploys after this. Tell Fable when done: production verification + Lighthouse run on the live URL is on me.
 

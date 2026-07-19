@@ -8,31 +8,26 @@ import { EMAIL, GITHUB_URL } from '../consts';
   <img class="portrait" src="/portrait.jpg" alt="Serhiy Kucherenko" width="112" height="112" loading="lazy" />
   <p>Three problems I take on:</p>
 
-  <h2>Your AI answers need to be auditable</h2>
-  <p>
-    RAG that cites the exact page, and evals that catch regressions before your users do. I
-    built <a href="https://github.com/KucherenkoSerhiy/payments-rag">payments-rag</a> this
-    way: every answer carries its source, and a cross-model judge grades the output.
-  </p>
+  <div class="card">
+    <h2>Your AI answers need to be auditable</h2>
+    <p>RAG that cites the exact page; evals that catch regressions before users do.</p>
+    <p class="meta"><a href="https://github.com/KucherenkoSerhiy/payments-rag">proof: payments-rag →</a></p>
+  </div>
 
-  <h2>Your LLM bill needs to stop surprising you</h2>
-  <p>
-    Caching, spend tracking, and knowing what a feature costs per request before finance
-    asks. I'm building a gateway for exactly this problem, in the open.
-  </p>
+  <div class="card">
+    <h2>Your LLM bill needs to stop surprising you</h2>
+    <p>Caching, spend tracking, cost per feature before finance asks. Building a gateway for this, in the open.</p>
+  </div>
 
-  <h2>Your .NET backend needs to hold</h2>
-  <p>
-    Nine years of it, much of that in banking infrastructure, where "mostly works" doesn't
-    count as working.
-  </p>
+  <div class="card">
+    <h2>Your .NET backend needs to hold</h2>
+    <p>Nine years, much of it in banking infrastructure, where "mostly works" doesn't count.</p>
+    <p class="meta"><a href="/blog/localhost-trap/">how I debug: 10,137 ms → 27 ms →</a></p>
+  </div>
 
   <p>
-    How I work, in one story: <a href="/blog/localhost-trap/">a 10-second mystery, measured down to a one-word fix</a>&#32;(10,137 ms → 27 ms).
-  </p>
-  <p>
-    How it starts: you write me a paragraph about the problem. If I can help, we talk. If I
-    can't, I say so and, when I can, point you at someone who can.
+    You write me a paragraph about the problem. If I can help, we talk. If I can't, I say so
+    and, when I can, point you at someone who can.
   </p>
   <p>
     <a href={`mailto:${EMAIL}`}>{EMAIL}</a> · <a href={GITHUB_URL}>the code speaks too</a>

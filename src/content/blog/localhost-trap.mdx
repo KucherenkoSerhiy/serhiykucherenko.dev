@@ -7,6 +7,10 @@ metric: "10,137 ms → 27 ms"
 canonicalUrl: https://www.linkedin.com/pulse/localhost-trap-10-second-database-connection-windows-kucherenko-1cm1e/
 ---
 
+import LocalhostFork from '../../components/diagrams/LocalhostFork.astro';
+
+<LocalhostFork />
+
 Every question in the app took about 15 seconds. The model was fast. Retrieval was fast. Ten of those seconds were hiding somewhere else, and for days I couldn't say where.
 
 The app is payments-rag, a RAG system I built over the SEPA payment rulebooks. You ask a question in plain English, it retrieves the relevant passages from Postgres + pgvector, sends them to Claude, and returns an answer with the exact rulebook page cited. Fast is not a goal; under 5 seconds is. On my Windows machine it was taking three times that, every single query, and the answers were correct, which somehow made it worse. Correct but slow doesn't scream "bug." It whispers "maybe that's just how it is."

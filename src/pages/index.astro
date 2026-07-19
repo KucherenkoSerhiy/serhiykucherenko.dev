@@ -30,8 +30,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 engineer   fullstack, 9y: banking · travel · medical · industrial
 now        building AI systems from scratch: evals, citations, all of it
 <span class="ok">shipped</span>    <a href="https://github.com/KucherenkoSerhiy/payments-rag">payments-rag</a> — rag over SEPA rulebooks, page-cited
-<span class="amber">scoping</span>    llm-cost-gateway — caching · spend tracking · alerts
-writing    field notes from building it<span class="cursor" aria-hidden="true"></span></pre>
+<span class="amber">scoping</span>    llm-cost-gateway — caching · spend tracking · alerts<span class="cursor" aria-hidden="true"></span></pre>
       <div class="doors">
         <a class="door" href="/hire/">
           <span class="cmd">&gt; hire --freelance</span>
@@ -46,9 +45,18 @@ writing    field notes from building it<span class="cursor" aria-hidden="true"><
   </section>
 
   <h2>Latest writing</h2>
+  {
+    posts[0] && (
+      <a class="featured" href={`/blog/${posts[0].id}/`}>
+        <span class="featured-metric">{posts[0].data.metric ?? posts[0].data.description}</span>
+        <span class="featured-title">{posts[0].data.title}</span>
+        <span class="meta">{posts[0].data.pubDate.toISOString().slice(0, 10)}</span>
+      </a>
+    )
+  }
   <ul class="plain post-list">
     {
-      posts.map((post) => (
+      posts.slice(1).map((post) => (
         <li>
           <a href={`/blog/${post.id}/`}>{post.data.title}</a>
           <span class="meta">

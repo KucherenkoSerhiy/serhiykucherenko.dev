@@ -1,33 +1,43 @@
 ---
-// giscus comments (GitHub Discussions). Dormant until both IDs are set —
-// see TODO-SERHIY.md item 5 for the 5-minute setup that produces them.
+// giscus comments (GitHub Discussions), configured per giscus.app setup 2026-07-20.
 const REPO = 'KucherenkoSerhiy/serhiykucherenko.dev';
-const REPO_ID = '';      // data-repo-id from giscus.app
-const CATEGORY_ID = '';  // data-category-id from giscus.app
-const enabled = REPO_ID !== '' && CATEGORY_ID !== '';
+const REPO_ID = 'R_kgDOTcfSoQ';
+const CATEGORY_ID = 'DIC_kwDOTcfSoc4DBh0k';
 ---
 
-{
-  enabled && (
-    <section class="comments">
-      <h2>Comments</h2>
-      <script
-        src="https://giscus.app/client.js"
-        data-repo={REPO}
-        data-repo-id={REPO_ID}
-        data-category="Announcements"
-        data-category-id={CATEGORY_ID}
-        data-mapping="pathname"
-        data-strict="1"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async
-      />
-    </section>
-  )
-}
+<section class="comments">
+  <h2>Comments</h2>
+  <script
+    id="giscus-script"
+    src="https://giscus.app/client.js"
+    data-repo={REPO}
+    data-repo-id={REPO_ID}
+    data-category="Announcements"
+    data-category-id={CATEGORY_ID}
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="dark"
+    data-lang="en"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+  />
+  <script is:inline>
+    (() => {
+      const theme = () =>
+        document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+      document.getElementById('giscus-script').dataset.theme = theme();
+      new MutationObserver(() => {
+        const frame = document.querySelector('iframe.giscus-frame');
+        if (frame)
+          frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: theme() } } },
+            'https://giscus.app'
+          );
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    })();
+  </script>
+</section>

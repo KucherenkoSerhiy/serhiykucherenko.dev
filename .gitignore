@@ -22,3 +22,8 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# personal note files, local only
+TODO-SERHIY.md
+NOTES*.md
+*-SERHIY.md

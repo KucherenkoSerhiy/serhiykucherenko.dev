@@ -49,7 +49,6 @@ const currentPath = Astro.url.pathname;
       <nav>
         <a href="/blog/" aria-current={currentPath.startsWith('/blog') ? 'page' : undefined}>blog</a>
         <a href="/lab/" aria-current={currentPath.startsWith('/lab') ? 'page' : undefined}>lab</a>
-        <a href="/projects/" aria-current={currentPath.startsWith('/projects') ? 'page' : undefined}>projects</a>
         <a href="/hire/" aria-current={currentPath.startsWith('/hire') ? 'page' : undefined}>hire</a>
         <button id="theme-toggle" aria-label="Toggle light mode">◐</button>
       </nav>

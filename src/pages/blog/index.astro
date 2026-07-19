@@ -17,7 +17,6 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
           <span class="meta">
             <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
             {post.data.metric && <span class="n">{post.data.metric}</span>}
-            <span>{post.data.description}</span>
           </span>
         </li>
       ))

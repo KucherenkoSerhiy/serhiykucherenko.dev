@@ -2,29 +2,23 @@
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="Lab" description="Experiments, live demos, and things built because they were fun.">
+<Base title="Lab" description="Projects and experiments: payments-rag, LLM Cost Gateway, and whatever ships next.">
   <h1>Lab</h1>
-  <p class="meta">Live demos run right here as they ship. Deployed experiments link out.</p>
 
   <div class="card">
-    <span class="status">● shipped · demo landing soon</span>
+    <span class="status">● shipped · demo soon</span>
     <h2>payments-rag</h2>
-    <p>
-      Ask the SEPA rulebooks a question, get the page cited back. Runs against the real
-      corpus with a cross-model judge keeping the answers honest.
-    </p>
+    <p class="stack">python · pgvector · claude · cross-model judge</p>
+    <p>Ask the SEPA rulebooks, get the page cited back.</p>
     <p class="meta">
       <a href="https://github.com/KucherenkoSerhiy/payments-rag">source →</a>
-      <!-- TODO: add live demo URL once the deployment lands -->
+      <!-- TODO: demo link → https://rag.serhiykucherenko.dev once the app is deployed -->
     </p>
   </div>
 
   <div class="card">
     <span class="status wip">◐ scoping</span>
     <h2>llm-cost-gateway</h2>
-    <p>
-      A gateway between apps and LLM providers: semantic caching, spend tracking, budget
-      alerts, provider abstraction.
-    </p>
+    <p>Semantic caching, spend tracking, budget alerts between app and LLM provider.</p>
   </div>
 </Base>

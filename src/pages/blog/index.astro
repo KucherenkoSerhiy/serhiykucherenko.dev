@@ -1,25 +1,77 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { milestones } from '../../data/shiplog';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+type Row = {
+  date: string;
+  kind: 'article' | 'ship' | 'milestone';
+  title: string;
+  sub: string;
+  metric: string;
+  metricTone: 'accent' | 'ok';
+  href?: string;
+};
+
+const postRows: Row[] = posts.map((p) => ({
+  date: p.data.pubDate.toISOString().slice(0, 10),
+  kind: 'article',
+  title: p.data.title,
+  sub: 'article',
+  metric: p.data.metric ?? '',
+  metricTone: 'accent',
+  href: `/blog/${p.id}/`,
+}));
+
+const rows: Row[] = [...postRows, ...milestones].sort((a, b) => (a.date < b.date ? 1 : -1));
+
+const kindLabel: Record<Row['kind'], string> = {
+  article: 'wrote',
+  ship: 'shipped',
+  milestone: 'milestone',
+};
+const fmt = (iso: string) => {
+  const d = new Date(iso + 'T00:00:00Z');
+  return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', timeZone: 'UTC' }).toLowerCase();
+};
 ---
 
-<Base title="Blog" description="Technical articles on RAG, LLM systems, and backend engineering.">
-  <h1>Blog</h1>
-  <ul class="plain post-list">
+<Base title="Ship log" description="Everything that shipped or changed, newest first. Articles, releases, milestones.">
+  <h1>ship log</h1>
+  <p class="eyebrow" style="margin-top:0.5rem;">everything that shipped or changed — newest first</p>
+
+  <div class="legend">
+    <span><span class="n-article"></span>wrote</span>
+    <span><span class="n-ship"></span>shipped</span>
+    <span><span class="n-milestone"></span>milestone</span>
+  </div>
+
+  <div class="timeline">
     {
-      posts.map((post) => (
-        <li>
-          <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-          <span class="meta">
-            <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
-            {post.data.metric && <span class="n">{post.data.metric}</span>}
-          </span>
-        </li>
-      ))
+      rows.map((r, i) => {
+        const Wrapper = r.href ? 'a' : 'div';
+        return (
+          <>
+            <div class="tl-when">
+              <div class="d">{fmt(r.date)}</div>
+              <div class={`k k-${r.kind}`}>{kindLabel[r.kind]}</div>
+            </div>
+            <div class="tl-rail">
+              <div class="line" style={i === rows.length - 1 ? 'height:1.8rem' : ''}></div>
+              <div class={`node n-${r.kind}`}></div>
+            </div>
+            <div class="tl-body">
+              <Wrapper {...(r.href ? { href: r.href } : {})} class={r.href ? '' : 'static'}>
+                {r.metric && <div class={`tl-metric m-${r.metricTone === 'ok' ? 'ship' : 'article'}`}>{r.metric}</div>}
+                <div class="tl-title">{r.title}</div>
+                <div class="tl-sub">{r.sub}</div>
+              </Wrapper>
+            </div>
+          </>
+        );
+      })
     }
-  </ul>
+  </div>
 </Base>

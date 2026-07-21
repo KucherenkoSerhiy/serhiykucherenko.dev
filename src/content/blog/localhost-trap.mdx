@@ -7,9 +7,18 @@ metric: "10,137 ms → 27 ms"
 canonicalUrl: https://www.linkedin.com/pulse/localhost-trap-10-second-database-connection-windows-kucherenko-1cm1e/
 ---
 
-import LocalhostFork from '../../components/diagrams/LocalhostFork.astro';
+import Waterfall from '../../components/diagrams/Waterfall.astro';
 
-<LocalhostFork />
+<Waterfall
+  caption="fig.1 — where the 15 seconds actually went"
+  rows={[
+    { label: 'connect + overhead', value: '10.2 s', percent: 100, tone: 'accent' },
+    { label: 'generation', value: '3.4 s', percent: 33, tone: 'dim' },
+    { label: 'retrieval', value: '2.1 s', percent: 21, tone: 'dim' },
+    { label: 'connect, fixed', value: '27 ms', percent: 0.3, tone: 'ok' },
+  ]}
+  footnote="Retrieval and generation were never the problem. The connection had the alibi."
+/>
 
 Every question in the app took about 15 seconds. The model was fast. Retrieval was fast. Ten of those seconds were hiding somewhere else, and for days I couldn't say where.
 

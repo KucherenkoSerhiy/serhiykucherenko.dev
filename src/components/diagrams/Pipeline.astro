@@ -1,0 +1,72 @@
+---
+// Archetype 2 — pipeline: how a system flows. Boxes joined by arrows.
+interface Step {
+  label: string;
+  sub?: string;
+  tone?: 'in' | 'work' | 'out'; // dim border / amber / green
+  dashed?: boolean;
+}
+interface Props {
+  steps: Step[];
+  height?: number;
+}
+const { steps, height = 60 } = Astro.props;
+
+const stroke = (t: Step['tone']) =>
+  t === 'work' ? 'var(--accent)' : t === 'out' ? 'var(--ok)' : 'var(--dim)';
+const fill = (t: Step['tone']) =>
+  t === 'work' ? 'var(--accent)' : t === 'out' ? 'var(--ok)' : 'var(--fg)';
+
+const W = 300;
+const gap = 8;
+const arrow = 20;
+const n = steps.length;
+const boxW = (W - (n - 1) * (gap + arrow)) / n;
+---
+
+<svg class="pipe" viewBox={`0 0 ${W} ${height}`} role="img" aria-label={steps.map((s) => s.label).join(' then ')} preserveAspectRatio="xMidYMid meet">
+  {
+    steps.map((s, i) => {
+      const x = i * (boxW + gap + arrow);
+      const cy = height / 2;
+      return (
+        <>
+          <rect
+            x={x}
+            y={cy - 19}
+            width={boxW}
+            height={38}
+            rx="3"
+            fill="none"
+            stroke={stroke(s.tone)}
+            stroke-width="1.5"
+            stroke-dasharray={s.dashed ? '4 3' : undefined}
+          />
+          <text x={x + boxW / 2} y={s.sub ? cy - 2 : cy + 4} text-anchor="middle" fill={fill(s.tone)} font-size="10" font-weight="700" font-family="var(--mono)">
+            {s.label}
+          </text>
+          {s.sub && (
+            <text x={x + boxW / 2} y={cy + 11} text-anchor="middle" fill="var(--dim)" font-size="9" font-family="var(--mono)">
+              {s.sub}
+            </text>
+          )}
+          {i < n - 1 && (
+            <path
+              d={`M ${x + boxW + 2} ${cy} h ${arrow + gap - 8} m -6 -4 l 4 4 l -4 4`}
+              fill="none"
+              stroke="var(--dim)"
+              stroke-width="1.5"
+            />
+          )}
+        </>
+      );
+    })
+  }
+</svg>
+
+<style>
+  .pipe {
+    width: 100%;
+    height: auto;
+  }
+</style>

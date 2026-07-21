@@ -1,0 +1,64 @@
+---
+// Archetype 3 — before -> after: the one-token fix.
+interface Props {
+  caption?: string;
+  before: string;
+  after: string;
+  note?: string;
+}
+const { caption, before, after, note } = Astro.props;
+---
+
+<figure class="fig">
+  {caption && <figcaption class="fig-cap">{caption}</figcaption>}
+  <div class="ba">
+    <span class="ba-before">{before}</span>
+    <span class="ba-arrow">▸</span>
+    <span class="ba-after">{after}</span>
+    {note && <span class="ba-note">{note}</span>}
+  </div>
+</figure>
+
+<style>
+  .fig {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem 1.15rem;
+    margin: 1.5rem 0;
+  }
+  .fig-cap {
+    font-size: 0.72rem;
+    color: var(--dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .ba {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+  }
+  .ba-before {
+    border: 1px solid var(--dim);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    color: var(--dim);
+    text-decoration: line-through;
+  }
+  .ba-arrow {
+    color: var(--accent);
+  }
+  .ba-after {
+    border: 1px solid var(--ok);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    color: var(--ok);
+  }
+  .ba-note {
+    color: var(--dim);
+    font-style: italic;
+    font-size: 0.8rem;
+  }
+</style>

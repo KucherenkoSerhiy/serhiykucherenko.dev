@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { EMAIL, GITHUB_URL } from '../consts';
+---
+
+<Base title="Contact" description="Freelance: auditable RAG systems, LLM cost control, backend .NET that holds.">
+  <div class="portrait-row">
+    <img src="/portrait.jpg" alt="Serhiy Kucherenko" width="64" height="64" loading="lazy" />
+    <div>
+      <h1 style="margin:0;font-size:1.3rem;">Contact</h1>
+      <div class="meta">remote · freelance · <span style="color:var(--ok)">● open</span></div>
+    </div>
+  </div>
+
+  <div class="pcards">
+    <div class="pcard">
+      <svg class="pico" width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="8" y="4" width="26" height="36" rx="2" stroke="currentColor" stroke-width="2"/><path d="M13 12h16M13 18h16M13 24h10" stroke="currentColor" stroke-width="2" opacity="0.5"/><circle cx="34" cy="34" r="9" stroke="var(--accent)" stroke-width="2"/><path d="M30 34l3 3 5-6" stroke="var(--accent)" stroke-width="2"/></svg>
+      <h2>Your AI answers need to be auditable</h2>
+      <p>RAG that cites the exact page. Evals that catch regressions first.</p>
+      <a href="https://github.com/KucherenkoSerhiy/payments-rag">proof: payments-rag →</a>
+    </div>
+
+    <div class="pcard">
+      <svg class="pico" width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M4 40C10 38 16 30 20 22s8-14 24-16" stroke="currentColor" stroke-width="2"/><path d="M4 18h40" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5 4"/><path d="M32 11l6-4 1 7" stroke="var(--accent)" stroke-width="2"/></svg>
+      <h2>Your LLM bill needs to stop surprising you</h2>
+      <p>Caching, spend tracking, cost per feature — before finance asks.</p>
+      <a href="/build/">how: llm-cost-gateway →</a>
+    </div>
+
+    <div class="pcard">
+      <svg class="pico" width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10l16-6z" stroke="currentColor" stroke-width="2"/><path d="M16 24h4v8h-4zM22 18h4v14h-4zM28 21h4v11h-4z" fill="var(--accent)"/></svg>
+      <h2>Your backend has to survive production</h2>
+      <p>Nine years of .NET in banking and payments — systems that can't go down.</p>
+      <a href="/blog/localhost-trap/">how I debug prod: 10,137 → 27 ms →</a>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="ask">
+      <div class="l1">Write me a paragraph about the problem.</div>
+      <div class="l2">If I can't help, I'll say so.</div>
+    </div>
+    <a class="btn" href={`mailto:${EMAIL}`}>✉ {EMAIL}</a>
+  </div>
+  <p class="meta"><a href={GITHUB_URL}>the code speaks too →</a></p>
+</Base>

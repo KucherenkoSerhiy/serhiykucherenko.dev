@@ -3,9 +3,80 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="404" description="Page not found.">
-  <pre class="log" style="margin-top: 3rem;"><span class="p">$ cat {'{'}this page{'}'}</span>
-cat: no such file or directory <span class="amber">(404)</span>
-
-try instead:
-  <a href="/">~/home</a>   <a href="/blog/">~/blog</a>   <a href="/lab/">~/lab</a></pre>
+  <div class="notfound">
+    <div class="big404">404</div>
+    <div class="trace">
+      <div class="cmd">$ GET /this-page</div>
+      <div class="rows">
+        <span>route /blog</span><span class="nomatch">·· no match</span>
+        <span>route /lab</span><span class="nomatch">·· no match</span>
+        <span>route /build</span><span class="nomatch">·· no match</span>
+        <span>route /contact</span><span class="nomatch">·· no match</span>
+      </div>
+      <div class="verdict">404 — at least it failed fast.</div>
+    </div>
+    <div class="paths">
+      <a href="/">&gt; cd ~</a>
+      <a href="/blog/">&gt; cd blog/</a>
+      <a href="/lab/">&gt; cd lab/</a>
+    </div>
+  </div>
 </Base>
+
+<style>
+  .notfound {
+    text-align: center;
+    padding: 2.5rem 0;
+  }
+  .big404 {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .trace {
+    display: inline-block;
+    text-align: left;
+    margin: 1.5rem auto 0;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    font-size: 0.8rem;
+    color: var(--dim);
+  }
+  .trace .cmd {
+    color: var(--dim);
+  }
+  .trace .rows {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 1.25rem;
+    margin-top: 0.6rem;
+  }
+  .trace .nomatch {
+    color: color-mix(in srgb, var(--dim) 60%, transparent);
+  }
+  .trace .verdict {
+    color: var(--accent);
+    margin-top: 0.7rem;
+  }
+  .paths {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .paths a {
+    border: 1px solid var(--line);
+    color: var(--fg);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  .paths a:hover {
+    border-color: var(--accent);
+  }
+</style>

@@ -1,24 +1,75 @@
 ---
 import Base from '../layouts/Base.astro';
+import Pipeline from '../components/diagrams/Pipeline.astro';
+import Brick from '../components/Brick.astro';
 ---
 
-<Base title="Lab" description="Projects and experiments: payments-rag, LLM Cost Gateway, and whatever ships next.">
+<Base title="Lab" description="Projects and experiments: payments-rag, LLM Cost Gateway. Each card carries its schematic.">
   <h1>Lab</h1>
+  <p class="eyebrow" style="margin-top:0.5rem;">a project earns a card only with a schematic — three boxes or it isn't scoped yet</p>
 
-  <div class="card">
-    <span class="status">● live</span>
-    <h2>payments-rag</h2>
-    <p class="stack">python · pgvector · claude · cross-model judge</p>
-    <p>Ask the SEPA rulebooks, get the page cited back.</p>
-    <p class="meta">
-      <a href="https://rag.serhiykucherenko.dev">run demo →</a> ·
-      <a href="https://github.com/KucherenkoSerhiy/payments-rag">source →</a>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" class="lab-grid">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span class="status">● live</span>
+        <span style="margin-left:auto;color:var(--accent-dim);font-size:0.7rem;">LAB-001</span>
+      </div>
+      <h2>payments-rag</h2>
+      <Pipeline
+        steps={[
+          { label: 'question', tone: 'in' },
+          { label: 'SEPA corpus', sub: 'pgvector · claude', tone: 'work' },
+          { label: 'answer + cite', tone: 'out' },
+        ]}
+      />
+      <p class="stack">python · pgvector · cross-model judge</p>
+      <p class="meta">
+        <a href="https://rag.serhiykucherenko.dev">run demo →</a> ·
+        <a href="https://github.com/KucherenkoSerhiy/payments-rag">source →</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span class="status wip">◐ scoping</span>
+        <span style="margin-left:auto;color:var(--accent-dim);font-size:0.7rem;">LAB-002</span>
+      </div>
+      <h2>llm-cost-gateway</h2>
+      <Pipeline
+        steps={[
+          { label: 'app', tone: 'in' },
+          { label: 'gateway', sub: 'cache · meter', tone: 'work', dashed: true },
+          { label: 'provider', tone: 'in' },
+        ]}
+      />
+      <p class="stack">.net · semantic cache</p>
+      <p class="meta"><a href="/build/">follow along →</a></p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem;">
+    <p class="eyebrow">how they relate — one stack, not two projects</p>
+    <div class="brick-layers">
+      <Brick title="payments-rag" sub="shipped · calls claude + gpt directly today" tone="shipped" live={true} minWidth="250px" />
+      <div class="connector"></div>
+      <p class="eyebrow" style="margin:0.2rem 0;">↑ the next brick snaps in here ↑</p>
+      <Brick title="llm-cost-gateway" sub="scoping · caches + meters every model call" tone="planned" minWidth="250px" />
+      <div class="connector"></div>
+      <div class="brick-row">
+        <Brick title="Claude" sub="generation · judge" tone="dep" minWidth="120px" />
+        <Brick title="GPT" sub="cross-model judge" tone="dep" minWidth="120px" />
+      </div>
+    </div>
+    <p class="meta" style="margin-top:1rem;font-style:italic;text-align:center;">
+      Today payments-rag calls the models raw. The gateway is the next brick — it snaps in between to cache and meter them.
     </p>
   </div>
-
-  <div class="card">
-    <span class="status wip">◐ scoping</span>
-    <h2>llm-cost-gateway</h2>
-    <p>Semantic caching, spend tracking, budget alerts between app and LLM provider.</p>
-  </div>
 </Base>
+
+<style>
+  @media (max-width: 640px) {
+    .lab-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

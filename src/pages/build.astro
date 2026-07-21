@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import Brick from '../components/Brick.astro';
+---
+
+<Base title="Build" description="How payments-rag is built — the system as snap-together bricks. Solid = shipped, dashed = next.">
+  <h1>How payments-rag is built</h1>
+  <p class="eyebrow" style="margin-top:0.5rem;">every brick is a real service · solid = shipped, dashed = next brick</p>
+
+  <div class="legend">
+    <span><span class="sw sw-ok"></span>shipped · mine</span>
+    <span><span class="sw sw-amber"></span>dependency · someone else runs it</span>
+    <span><span class="sw sw-dash"></span>next · not built yet</span>
+  </div>
+
+  <div class="card">
+    <div class="lego">
+      <span class="layer-label">edge</span>
+      <div class="layer-bricks">
+        <Brick title="Cloudflare" sub="CDN · WAF · rate-limit" tone="dep" minWidth="180px" />
+      </div>
+    </div>
+    <div class="lego-gap"><div class="connector"></div></div>
+
+    <div class="lego">
+      <span class="layer-label">app</span>
+      <div class="layer-bricks">
+        <Brick title="payments-rag api" sub="python · retriever · eval harness · fly.io" tone="shipped" live={true} studs={3} minWidth="240px" />
+      </div>
+    </div>
+    <div class="lego-gap"><div class="connector"></div></div>
+
+    <div class="lego">
+      <span class="layer-label">depends on</span>
+      <div class="layer-bricks">
+        <Brick title="Claude" sub="generation · judge" tone="dep" minWidth="130px" />
+        <Brick title="GPT" sub="cross-model judge" tone="dep" minWidth="130px" />
+        <Brick title="Postgres + pgvector" sub="fly.io · SEPA corpus" tone="shipped" minWidth="170px" />
+      </div>
+    </div>
+
+    <div class="bay">
+      <p class="eyebrow">the bay — bricks not snapped in yet</p>
+      <div class="brick-row" style="justify-content:flex-start;">
+        <Brick title="llm-cost-gateway" sub="scoping · cache + meter every call" tone="planned" minWidth="200px" />
+        <div class="plus" aria-hidden="true">+</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="meta" style="font-style:italic;">
+    The stack is small on purpose. Each brick is a service that actually runs — the dashed one
+    is the next thing being scoped, not a wishlist.
+  </p>
+</Base>
+
+<style>
+  .sw {
+    width: 14px;
+    height: 10px;
+    border-radius: 2px;
+    border: 1.5px solid;
+    display: inline-block;
+  }
+  .sw-ok {
+    border-color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 12%, transparent);
+  }
+  .sw-amber {
+    border-color: var(--accent);
+  }
+  .sw-dash {
+    border-style: dashed;
+    border-color: var(--dim);
+  }
+  .lego-gap {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+  }
+  .lego-gap .connector {
+    margin-left: 30px;
+    grid-column: 2;
+  }
+  .bay {
+    border-top: 1px dashed var(--line);
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+  }
+  .plus {
+    border: 1.5px dashed var(--line);
+    border-radius: 4px;
+    min-width: 56px;
+    display: grid;
+    place-items: center;
+    color: var(--dim);
+    font-size: 1.25rem;
+  }
+</style>

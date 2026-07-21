@@ -2,9 +2,11 @@
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const latest = posts[0];
+const parts = (latest?.data.metric ?? '').split('→').map((s) => s.trim());
 ---
 
 <Base>
@@ -22,52 +24,68 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       sameAs: ['https://github.com/KucherenkoSerhiy'],
     })}
   />
+
   <section class="hero">
     <canvas id="field" aria-hidden="true"></canvas>
     <div class="hero-inner">
-      <h1 class="sr-only">Serhiy Kucherenko — fullstack engineer building AI systems</h1>
-      <pre class="log" id="log"><span class="p">$ serhiy --status</span>
-engineer   fullstack, 9y: banking · travel · medical · industrial
-now        building AI systems from scratch: evals, citations, all of it
-<span class="ok">shipped</span>    <a href="https://github.com/KucherenkoSerhiy/payments-rag">payments-rag</a> — rag over SEPA rulebooks, page-cited
-<span class="amber">scoping</span>    llm-cost-gateway — caching · spend tracking · alerts<span class="cursor" aria-hidden="true"></span></pre>
+      <h1 class="sr-only">Serhiy Kucherenko — fullstack engineer building AI systems from scratch</h1>
+
+      <p class="eyebrow">fig.0 — the operator</p>
+      <div class="opmap">
+        <div class="op-node">
+          <div class="t">.NET / banking</div>
+          <div class="s">9y · SEPA · ISO 20022</div>
+        </div>
+        <div class="op-link"></div>
+        <div class="op-node now">
+          <div class="t">AI systems, from scratch</div>
+          <div class="s">rag · evals · citations · cost</div>
+        </div>
+        <div class="op-link"></div>
+        <div class="op-node next">
+          <div class="t">your system</div>
+          <div class="s">open to freelance</div>
+        </div>
+      </div>
+
+      {
+        latest && (
+          <>
+            <p class="eyebrow" style="margin-top:2rem;">
+              latest · {latest.data.pubDate.toISOString().slice(0, 10)}
+            </p>
+            <a href={`/blog/${latest.id}/`} style="text-decoration:none;">
+              <div class="metricline">
+                {parts.length === 2 ? (
+                  <>
+                    <span class="big">{parts[0]}</span>
+                    <span class="arrow">→</span>
+                    <span class="big ok">{parts[1]}</span>
+                  </>
+                ) : (
+                  <span class="big">{parts[0]}</span>
+                )}
+              </div>
+              <div style="color:var(--fg);margin-top:0.4rem;">
+                {latest.data.title} <span style="color:var(--accent)">→</span>
+              </div>
+            </a>
+          </>
+        )
+      }
+
       <div class="doors">
-        <a class="door" href="/hire/">
-          <span class="cmd">&gt; hire --freelance</span>
-          <span class="sub">rag systems · llm cost control · backend .net</span>
+        <a class="door" href="/contact/">
+          <span class="cmd">&gt; contact --freelance</span>
+          <span class="sub">rag · llm cost control · backend .net</span>
         </a>
         <a class="door" href="/lab/">
           <span class="cmd">&gt; cd lab/</span>
-          <span class="sub">experiments, demos, things that fizz</span>
+          <span class="sub">demos, experiments, things that fizz</span>
         </a>
       </div>
     </div>
   </section>
-
-  <h2>Latest writing</h2>
-  {
-    posts[0] && (
-      <a class="featured" href={`/blog/${posts[0].id}/`}>
-        <span class="featured-metric">{posts[0].data.metric ?? posts[0].data.description}</span>
-        <span class="featured-title">{posts[0].data.title}</span>
-        <span class="meta">{posts[0].data.pubDate.toISOString().slice(0, 10)}</span>
-      </a>
-    )
-  }
-  <ul class="plain post-list">
-    {
-      posts.slice(1).map((post) => (
-        <li>
-          <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-          <span class="meta">
-            <span>{post.data.pubDate.toISOString().slice(0, 10)}</span>
-            {post.data.metric && <span class="n">{post.data.metric}</span>}
-          </span>
-        </li>
-      ))
-    }
-  </ul>
-  <p class="meta"><a href="/blog/">all posts →</a></p>
 </Base>
 
 <style>
@@ -79,28 +97,14 @@ now        building AI systems from scratch: evals, citations, all of it
     clip-path: inset(50%);
     white-space: nowrap;
   }
+  .hero-inner .eyebrow:first-of-type {
+    margin-top: 0;
+  }
 </style>
 
 <script is:inline>
   (() => {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Boot: reveal log lines one by one. Content is real HTML; JS only paces it.
-    const log = document.getElementById('log');
-    if (log && !reduced) {
-      const lines = log.innerHTML.split('\n');
-      let i = 0;
-      log.innerHTML = '';
-      log.style.minHeight = lines.length * 1.65 + 'em';
-      const step = () => {
-        if (i >= lines.length) return;
-        log.innerHTML = lines.slice(0, ++i).join('\n');
-        setTimeout(step, 110);
-      };
-      step();
-    }
-
-    // Glyph field: dim characters that wake near the cursor.
     const canvas = document.getElementById('field');
     const hero = canvas && canvas.parentElement;
     if (!canvas || !hero) return;
@@ -141,9 +145,6 @@ now        building AI systems from scratch: evals, citations, all of it
       my = e.clientY - b.top;
       if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); });
     });
-    hero.addEventListener('pointerleave', () => {
-      mx = my = -9999;
-      draw();
-    });
+    hero.addEventListener('pointerleave', () => { mx = my = -9999; draw(); });
   })();
 </script>

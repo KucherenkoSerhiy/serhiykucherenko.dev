@@ -1,0 +1,105 @@
+---
+// The reusable brick. Studs on top = things that snap onto it.
+// tone: shipped (green, yours) · dep (amber, someone else runs it) · planned (dashed) · degraded (red).
+interface Props {
+  title: string;
+  sub?: string;
+  tone?: 'shipped' | 'dep' | 'planned' | 'degraded';
+  studs?: number;
+  live?: boolean;
+  minWidth?: string;
+}
+const { title, sub, tone = 'shipped', studs = 2, live = false, minWidth = '150px' } = Astro.props;
+---
+
+<div class:list={['brick', `brick-${tone}`]} style={`min-width:${minWidth}`}>
+  <span class="studs" aria-hidden="true">
+    {Array.from({ length: studs }).map(() => <span class="stud"></span>)}
+  </span>
+  <span class="brick-title">
+    {live && <span class="dot" aria-hidden="true"></span>}
+    {title}
+  </span>
+  {sub && <span class="brick-sub">{sub}</span>}
+</div>
+
+<style>
+  .brick {
+    position: relative;
+    border: 1.5px solid var(--dim);
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    background: transparent;
+  }
+  .brick-shipped {
+    border-color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 10%, transparent);
+  }
+  .brick-dep {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+  .brick-planned {
+    border-style: dashed;
+    border-color: var(--dim);
+  }
+  .brick-degraded {
+    border-color: #b3372b;
+    background: color-mix(in srgb, #b3372b 8%, transparent);
+  }
+  .studs {
+    position: absolute;
+    top: -5px;
+    left: 14px;
+    display: flex;
+    gap: 8px;
+  }
+  .stud {
+    width: 12px;
+    height: 6px;
+    border-radius: 3px 3px 0 0;
+  }
+  .brick-shipped .stud {
+    background: var(--ok);
+  }
+  .brick-dep .stud {
+    background: var(--accent);
+  }
+  .brick-planned .stud {
+    background: color-mix(in srgb, var(--dim) 60%, transparent);
+  }
+  .brick-degraded .stud {
+    background: #b3372b;
+  }
+  .brick-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--bright);
+  }
+  .brick-dep .brick-title {
+    color: var(--accent);
+  }
+  .brick-planned .brick-title {
+    color: color-mix(in srgb, var(--dim) 35%, var(--fg));
+  }
+  .brick-degraded .brick-title {
+    color: #e06a5e;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 8px var(--ok);
+    flex-shrink: 0;
+  }
+  .brick-sub {
+    display: block;
+    color: color-mix(in srgb, var(--dim) 45%, var(--fg));
+    font-size: 0.72rem;
+    margin-top: 0.15rem;
+  }
+</style>

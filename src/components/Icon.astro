@@ -1,0 +1,36 @@
+---
+// 2px stroke, 24 grid. Inherits color and size from context. Decorative by default.
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+}
+const { name, size = 16, class: cls = '' } = Astro.props;
+
+const PATHS: Record<string, string> = {
+  blog: '<path d="M4 5h16M4 10h16M4 15h10"/>',
+  lab: '<path d="M9 3h6M10 3v6l-5.5 9.5A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.5L14 9V3"/>',
+  build: '<rect x="3" y="13" width="18" height="7" rx="1"/><rect x="4" y="4" width="11" height="7" rx="1"/>',
+  contact: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/>',
+  date: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  duration: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+  notes: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  citation: '<path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/><circle cx="11" cy="14" r="3"/><path d="M13.5 16.5L17 20"/>',
+  cost: '<circle cx="12" cy="12" r="9"/><path d="M12 6v12M15.5 8.5c-.8-1-2-1.5-3.5-1.5-2 0-3.5 1.1-3.5 2.7 0 3.6 7 1.8 7 5.2 0 1.6-1.5 2.6-3.5 2.6-1.6 0-2.9-.6-3.7-1.7"/>',
+  shield: '<path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5l8-3z"/>',
+  branch: '<circle cx="6" cy="5" r="2.5"/><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 7.5v9M8 6l7.5 4.5M8 18l7.5-4.5"/>',
+  rss: '<path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none"/>',
+};
+const GITHUB =
+  '<path d="M12 1C5.9 1 1 5.9 1 12c0 4.9 3.2 9 7.5 10.5.6.1.8-.2.8-.5v-2c-3.1.7-3.7-1.3-3.7-1.3-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 1.7 2.6 1.2 3.2.9.1-.7.4-1.2.7-1.5-2.4-.3-5-1.2-5-5.5 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.4.1-2.9 0 0 .9-.3 3 1.1a10.4 10.4 0 0 1 5.5 0c2.1-1.4 3-1.1 3-1.1.6 1.5.2 2.6.1 2.9.7.8 1.1 1.8 1.1 3 0 4.3-2.6 5.2-5.1 5.5.4.3.8 1 .8 2v3c0 .3.2.6.8.5C19.8 21 23 16.9 23 12c0-6.1-4.9-11-11-11z"/>';
+---
+
+{
+  name === 'github' ? (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" class={cls} aria-hidden="true" set:html={GITHUB} />
+  ) : name === 'theme' ? (
+    <svg width={size} height={size} viewBox="0 0 24 24" class={cls} aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
+  ) : (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={cls} aria-hidden="true" set:html={PATHS[name] ?? ''} />
+  )
+}

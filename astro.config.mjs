@@ -6,5 +6,6 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://serhiykucherenko.dev',
   integrations: [mdx(), sitemap()],
-  redirects: { '/projects/': '/lab/' },
+  redirects: { '/projects/': '/lab/', '/hire/': '/contact/' },
+  markdown: { shikiConfig: { theme: 'css-variables' } },
 });

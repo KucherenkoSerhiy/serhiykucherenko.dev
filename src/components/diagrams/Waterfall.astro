@@ -1,0 +1,81 @@
+---
+// Archetype 1 — waterfall: where time or money went. One amber bar is the point.
+interface Row {
+  label: string;
+  value: string; // pre-formatted, real number as a string
+  percent: number; // 0-100, bar width relative to the largest
+  tone?: 'accent' | 'dim' | 'ok';
+}
+interface Props {
+  caption: string;
+  rows: Row[];
+  footnote?: string;
+}
+const { caption, rows, footnote } = Astro.props;
+const color = (t: Row['tone']) =>
+  t === 'accent' ? 'var(--accent)' : t === 'ok' ? 'var(--ok)' : 'var(--dim)';
+---
+
+<figure class="fig">
+  <figcaption class="fig-cap">{caption}</figcaption>
+  <div class="wf">
+    {
+      rows.map((r) => (
+        <>
+          <span class="wf-label">{r.label}</span>
+          <span class="wf-track">
+            <span class="wf-bar" style={`width:${Math.max(r.percent, 0.5)}%;background:${color(r.tone)}`}></span>
+          </span>
+          <span class="wf-val" style={`color:${color(r.tone)}`}>{r.value}</span>
+        </>
+      ))
+    }
+  </div>
+  {footnote && <p class="fig-note">{footnote}</p>}
+</figure>
+
+<style>
+  .fig {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem 1.15rem 0.9rem;
+    margin: 1.5rem 0;
+  }
+  .fig-cap {
+    font-size: 0.72rem;
+    color: var(--dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .wf {
+    display: grid;
+    grid-template-columns: minmax(80px, auto) 1fr minmax(64px, auto);
+    gap: 0.5rem 0.85rem;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--dim);
+  }
+  .wf-track {
+    height: 12px;
+    background: color-mix(in srgb, var(--dim) 14%, transparent);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .wf-bar {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    min-width: 3px;
+  }
+  .wf-val {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .fig-note {
+    font-size: 0.8rem;
+    color: var(--dim);
+    font-style: italic;
+    margin: 0.85rem 0 0;
+  }
+</style>

@@ -1,6 +1,6 @@
 // Two altitudes, C4 style.
-//   Level 1 (/build)          — systems and the outside world. No internals.
-//   Level 2 (/build/<id>)     — one drill-down per system. Internals live here only.
+//   Level 1 (/systems)        — systems and the outside world. No internals.
+//   Level 2 (/systems/<id>)   — one drill-down per system. Internals live here only.
 // Nothing goes in until it actually runs; planned work is marked and stays marked.
 
 export type SystemId = 'payments-rag' | 'site' | 'gateway';

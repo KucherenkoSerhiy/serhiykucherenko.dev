@@ -4,12 +4,12 @@ import { systems } from '../../data/architecture';
 ---
 
 <Base
-  title="Build"
+  title="Systems"
   description="Level 1: the systems and what they talk to. Each one zooms in to its own diagram."
 >
-  <h1>Build</h1>
+  <h1>Systems</h1>
   <p class="eyebrow" style="margin-top:0.5rem;">
-    level 1 — the whole picture · no internals here, each system zooms in
+    level 1 of two (C4) — the whole picture · no internals here, each system zooms in
   </p>
 
   <svg class="ctx" viewBox="0 0 680 396" role="img" aria-labelledby="ctx-t ctx-d">
@@ -37,7 +37,7 @@ import { systems } from '../../data/architecture';
     </g>
 
     <!-- site -->
-    <a href="/build/site/">
+    <a href="/systems/site/">
       <rect x="196" y="22" width="212" height="62" rx="4" fill="color-mix(in srgb, var(--ok) 10%, transparent)" stroke="var(--ok)" stroke-width="1.5" />
       <text x="302" y="46" text-anchor="middle" fill="var(--bright)" font-size="13" font-weight="700">serhiykucherenko.dev</text>
       <text x="302" y="63" text-anchor="middle" fill="var(--dim)" font-size="10">writing · projects · contact</text>
@@ -45,7 +45,7 @@ import { systems } from '../../data/architecture';
     </a>
 
     <!-- payments-rag -->
-    <a href="/build/payments-rag/">
+    <a href="/systems/payments-rag/">
       <rect x="196" y="150" width="212" height="62" rx="4" fill="color-mix(in srgb, var(--ok) 10%, transparent)" stroke="var(--ok)" stroke-width="1.5" />
       <text x="302" y="174" text-anchor="middle" fill="var(--bright)" font-size="13" font-weight="700">payments-rag</text>
       <text x="302" y="191" text-anchor="middle" fill="var(--dim)" font-size="10">answers with the page cited</text>
@@ -53,7 +53,7 @@ import { systems } from '../../data/architecture';
     </a>
 
     <!-- gateway, planned -->
-    <a href="/build/gateway/">
+    <a href="/systems/gateway/">
       <rect x="196" y="296" width="212" height="58" rx="4" fill="none" stroke="var(--dim)" stroke-width="1.5" stroke-dasharray="5 4" />
       <text x="302" y="320" text-anchor="middle" fill="var(--fg)" font-size="13" font-weight="700">llm-cost-gateway</text>
       <text x="302" y="336" text-anchor="middle" fill="var(--dim)" font-size="10">planned · caches and meters</text>
@@ -78,10 +78,10 @@ import { systems } from '../../data/architecture';
     </g>
 
     <!-- relations -->
-    <path d="M136 112 H 190" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
-    <text x="163" y="104" text-anchor="middle" fill="var(--dim)" font-size="9">reads</text>
-    <path d="M136 145 H 190" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
-    <text x="163" y="139" text-anchor="middle" fill="var(--dim)" font-size="9">asks</text>
+    <path d="M136 115 H 170 V 53 H 190" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
+    <text x="140" y="109" text-anchor="start" fill="var(--dim)" font-size="9">reads</text>
+    <path d="M136 139 H 182 V 181 H 190" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
+    <text x="140" y="152" text-anchor="start" fill="var(--dim)" font-size="9">asks</text>
 
     <path d="M408 53 H 464" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
     <text x="436" y="46" text-anchor="middle" fill="var(--dim)" font-size="9">served by</text>
@@ -99,7 +99,7 @@ import { systems } from '../../data/architecture';
   <div class="zoomrow">
     {
       systems.map((s) => (
-        <a class={`zoomcard${s.state === 'planned' ? ' planned' : ''}`} href={`/build/${s.id}/`}>
+        <a class={`zoomcard${s.state === 'planned' ? ' planned' : ''}`} href={`/systems/${s.id}/`}>
           <span class="zc-state">{s.state === 'planned' ? '◐ planned' : '● live'}</span>
           <span class="zc-name">{s.name}</span>
           <span class="zc-what">{s.what}</span>

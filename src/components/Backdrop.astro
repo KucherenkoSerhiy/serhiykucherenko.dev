@@ -1,0 +1,115 @@
+---
+// Embedding space: points drifting in a vector field. The ones nearest the
+// cursor link to it, which is what retrieval does. Purely decorative, behind
+// everything, never interactive.
+---
+
+<canvas id="backdrop" aria-hidden="true"></canvas>
+
+<style>
+  #backdrop {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const cv = document.getElementById('backdrop');
+    if (!cv) return;
+    const ctx = cv.getContext('2d', { alpha: true });
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const root = document.documentElement;
+    let pts = [], mx = -9999, my = -9999, raf = 0;
+
+    const readVar = (n) => getComputedStyle(root).getPropertyValue(n).trim();
+    let accent = readVar('--accent'), dim = readVar('--dim');
+
+    const fit = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      cv.width = innerWidth * dpr;
+      cv.height = innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // One point per ~9000px², capped so a big monitor stays cheap.
+      const target = Math.min(220, Math.round((innerWidth * innerHeight) / 9000));
+      pts = Array.from({ length: target }, () => ({
+        x: Math.random() * innerWidth,
+        y: Math.random() * innerHeight,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: (Math.random() - 0.5) * 0.12,
+      }));
+    };
+
+    const R = 150; // linking radius around the cursor
+
+    const draw = () => {
+      raf = 0;
+      const w = innerWidth, h = innerHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      if (!reduced) {
+        for (const p of pts) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = w;
+          else if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h;
+          else if (p.y > h) p.y = 0;
+        }
+      }
+
+      ctx.lineWidth = 1;
+      for (const p of pts) {
+        const d = Math.hypot(p.x - mx, p.y - my);
+        const near = d < R;
+        if (near) {
+          ctx.strokeStyle = accent;
+          ctx.globalAlpha = 0.22 * (1 - d / R);
+          ctx.beginPath();
+          ctx.moveTo(mx, my);
+          ctx.lineTo(p.x, p.y);
+          ctx.stroke();
+        }
+        ctx.fillStyle = near ? accent : dim;
+        ctx.globalAlpha = near ? 0.5 * (1 - d / R) + 0.18 : 0.14;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, near ? 1.9 : 1.3, 0, 6.284);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      if (!reduced && !document.hidden) raf = requestAnimationFrame(draw);
+    };
+
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(draw);
+    };
+
+    fit();
+    kick();
+    addEventListener('resize', () => {
+      fit();
+      kick();
+    });
+    addEventListener('pointermove', (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+      kick();
+    });
+    addEventListener('pointerleave', () => {
+      mx = my = -9999;
+      kick();
+    });
+    document.addEventListener('visibilitychange', kick);
+    // Theme toggle swaps the palette under us.
+    new MutationObserver(() => {
+      accent = readVar('--accent');
+      dim = readVar('--dim');
+      kick();
+    }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  })();
+</script>

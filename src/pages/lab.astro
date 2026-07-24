@@ -1,75 +1,138 @@
 ---
 import Base from '../layouts/Base.astro';
-import Pipeline from '../components/diagrams/Pipeline.astro';
-import Brick from '../components/Brick.astro';
+import { experiments } from '../data/lab';
+
+const open = experiments.filter((e) => e.state === 'open').length;
+const answered = experiments.filter((e) => e.state === 'answered').length;
+const stateLabel = { open: 'open', answered: 'answered', dropped: 'dropped' } as const;
 ---
 
-<Base title="Lab" description="Projects and experiments: payments-rag, LLM Cost Gateway. Each card carries its schematic.">
+<Base
+  title="Lab"
+  description="Open questions being tested, and the ones already answered. Projects that grew up live under systems."
+>
   <h1>Lab</h1>
-  <p class="eyebrow" style="margin-top:0.5rem;">a project earns a card only with a schematic — three boxes or it isn't scoped yet</p>
+  <p class="eyebrow" style="margin-top:0.5rem;">
+    questions being tested · {open} open · {answered} answered · a "no" counts as an answer
+  </p>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" class="lab-grid">
-    <div class="card">
-      <div style="display:flex;align-items:center;gap:0.5rem;">
-        <span class="status">● live</span>
-        <span style="margin-left:auto;color:var(--accent-dim);font-size:0.7rem;">LAB-001</span>
-      </div>
-      <h2>payments-rag</h2>
-      <Pipeline
-        steps={[
-          { label: 'question', tone: 'in' },
-          { label: 'SEPA corpus', sub: 'pgvector · claude', tone: 'work' },
-          { label: 'answer + cite', tone: 'out' },
-        ]}
-      />
-      <p class="stack">python · pgvector · cross-model judge</p>
-      <p class="meta">
-        <a href="https://rag.serhiykucherenko.dev" target="_blank" rel="noopener noreferrer">run demo ↗</a> ·
-        <a href="https://github.com/KucherenkoSerhiy/payments-rag" target="_blank" rel="noopener noreferrer">source ↗</a>
-      </p>
-    </div>
-
-    <div class="card">
-      <div style="display:flex;align-items:center;gap:0.5rem;">
-        <span class="status wip">◐ scoping</span>
-        <span style="margin-left:auto;color:var(--accent-dim);font-size:0.7rem;">LAB-002</span>
-      </div>
-      <h2>llm-cost-gateway</h2>
-      <Pipeline
-        steps={[
-          { label: 'app', tone: 'in' },
-          { label: 'gateway', sub: 'cache · meter', tone: 'work', dashed: true },
-          { label: 'provider', tone: 'in' },
-        ]}
-      />
-      <p class="stack">.net · semantic cache</p>
-      <p class="meta"><a href="/systems/gateway/">follow along →</a></p>
-    </div>
+  <div class="qlist">
+    {
+      experiments.map((e) => (
+        <article class={`q q-${e.state}`}>
+          <div class="q-side" aria-hidden="true">
+            <span class={`q-mark m-${e.state}`}>{e.state === 'answered' ? '✓' : e.state === 'dropped' ? '×' : '?'}</span>
+          </div>
+          <div class="q-body">
+            <p class="q-state">{stateLabel[e.state]} · <span class="q-ctx">{e.context}</span></p>
+            <h2>{e.question}</h2>
+            {e.metric && <p class="q-metric">{e.metric}</p>}
+            {e.finding && <p class="q-finding">{e.finding}</p>}
+            {e.evidence && (
+              <p class="meta">
+                <a href={e.evidence.url} target="_blank" rel="noopener noreferrer">
+                  {e.evidence.label} ↗
+                </a>
+              </p>
+            )}
+          </div>
+        </article>
+      ))
+    }
   </div>
 
-  <div class="card" style="margin-top:1rem;">
-    <p class="eyebrow">how they relate — one stack, not two projects</p>
-    <div class="brick-layers">
-      <Brick title="payments-rag" sub="shipped · calls claude + gpt directly today" tone="shipped" live={true} minWidth="250px" />
-      <div class="connector"></div>
-      <p class="eyebrow" style="margin:0.2rem 0;">↑ the next brick snaps in here ↑</p>
-      <Brick title="llm-cost-gateway" sub="scoping · caches + meters every model call" tone="planned" minWidth="250px" />
-      <div class="connector"></div>
-      <div class="brick-row">
-        <Brick title="Claude" sub="generation · judge" tone="dep" minWidth="120px" />
-        <Brick title="GPT" sub="cross-model judge" tone="dep" minWidth="120px" />
-      </div>
-    </div>
-    <p class="meta" style="margin-top:1rem;font-style:italic;text-align:center;">
-      Today payments-rag calls the models raw. The gateway is the next brick — it snaps in between to cache and meter them.
-    </p>
-  </div>
+  <p class="meta outro">
+    Things that outgrow a question become systems. <a href="/systems/">see what they turned into →</a>
+  </p>
 </Base>
 
 <style>
-  @media (max-width: 640px) {
-    .lab-grid {
-      grid-template-columns: 1fr !important;
-    }
+  .qlist {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    margin-top: 1.25rem;
+  }
+  .q {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 0 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1rem 1.15rem;
+  }
+  .q-open {
+    border-left: 2px solid var(--accent);
+  }
+  .q-answered {
+    border-left: 2px solid var(--ok);
+  }
+  .q-dropped {
+    border-left: 2px dashed var(--dim);
+  }
+  .q-side {
+    display: flex;
+    justify-content: center;
+    padding-top: 0.15rem;
+  }
+  .q-mark {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid;
+    display: grid;
+    place-items: center;
+    font-size: 0.8rem;
+  }
+  .m-open {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .m-answered {
+    color: var(--ok);
+    border-color: var(--ok);
+  }
+  .m-dropped {
+    color: var(--dim);
+    border-color: var(--dim);
+    border-style: dashed;
+  }
+  .q-state {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.3rem;
+  }
+  .q-answered .q-state {
+    color: var(--ok);
+  }
+  .q-ctx {
+    color: var(--dim);
+    letter-spacing: 0.06em;
+  }
+  .q h2 {
+    font-size: 1rem;
+    margin: 0 0 0.4rem;
+    line-height: 1.45;
+  }
+  .q-metric {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.01em;
+  }
+  .q-answered .q-metric {
+    color: var(--ok);
+  }
+  .q-finding {
+    color: var(--dim);
+    font-size: 0.85rem;
+    margin: 0 0 0.5rem;
+    max-width: 62ch;
+  }
+  .outro {
+    margin-top: 1.75rem;
   }
 </style>

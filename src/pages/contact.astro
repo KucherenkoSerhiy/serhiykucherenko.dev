@@ -1,6 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import { EMAIL, GITHUB_URL } from '../consts';
+import { articles } from '../data/articles';
+
+const debugStory = articles.find((a) => a.title.includes('localhost trap'));
 ---
 
 <Base title="Contact" description="Freelance: auditable RAG systems, LLM cost control, backend .NET that holds.">
@@ -17,7 +20,7 @@ import { EMAIL, GITHUB_URL } from '../consts';
       <svg class="pico" width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="8" y="4" width="26" height="36" rx="2" stroke="currentColor" stroke-width="2"/><path d="M13 12h16M13 18h16M13 24h10" stroke="currentColor" stroke-width="2" opacity="0.5"/><circle cx="34" cy="34" r="9" stroke="var(--accent)" stroke-width="2"/><path d="M30 34l3 3 5-6" stroke="var(--accent)" stroke-width="2"/></svg>
       <h2>Your AI answers need to be auditable</h2>
       <p>RAG that cites the exact page. Evals that catch regressions first.</p>
-      <a href="https://github.com/KucherenkoSerhiy/payments-rag">proof: payments-rag →</a>
+      <a href="https://github.com/KucherenkoSerhiy/payments-rag" target="_blank" rel="noopener noreferrer">proof: payments-rag ↗</a>
     </div>
 
     <div class="pcard">
@@ -31,7 +34,7 @@ import { EMAIL, GITHUB_URL } from '../consts';
       <svg class="pico" width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10l16-6z" stroke="currentColor" stroke-width="2"/><path d="M16 24h4v8h-4zM22 18h4v14h-4zM28 21h4v11h-4z" fill="var(--accent)"/></svg>
       <h2>Your backend has to survive production</h2>
       <p>Nine years of .NET in banking and payments — systems that can't go down.</p>
-      <a href="/blog/localhost-trap/">how I debug prod: 10,137 → 27 ms →</a>
+      <a href={debugStory?.url ?? '/blog/'} target="_blank" rel="noopener noreferrer">how I debug prod: 10,137 → 27 ms ↗</a>
     </div>
   </div>
 
@@ -42,5 +45,5 @@ import { EMAIL, GITHUB_URL } from '../consts';
     </div>
     <a class="btn" href={`mailto:${EMAIL}`}>✉ {EMAIL}</a>
   </div>
-  <p class="meta"><a href={GITHUB_URL}>the code speaks too →</a></p>
+  <p class="meta"><a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">the code speaks too ↗</a></p>
 </Base>

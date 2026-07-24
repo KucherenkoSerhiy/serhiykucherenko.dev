@@ -41,7 +41,17 @@ const standing = towers.map((t) => ({ ...t, bricks: t.bricks.filter((b) => b.sta
                 {Array.from({ length: 5 }).map(() => <span></span>)}
               </div>
               <div class="tower-cap">
-                {t.href ? <a href={t.href}>{t.name}</a> : <span>{t.name}</span>}
+                {
+                  t.href ? (
+                    t.href.startsWith('http') ? (
+                      <a href={t.href} target="_blank" rel="noopener noreferrer">{t.name}</a>
+                    ) : (
+                      <a href={t.href}>{t.name}</a>
+                    )
+                  ) : (
+                    <span>{t.name}</span>
+                  )
+                }
                 <span class={`tower-status s-${t.status}`}>{t.status}</span>
               </div>
               <div class="stack">

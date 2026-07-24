@@ -67,7 +67,10 @@ const fmt = (iso: string) =>
       rows.map((r, i) => {
         const Wrapper = r.url ? 'a' : 'div';
         const linkAttrs = r.url
-          ? { href: r.url, ...(r.external ? { rel: 'noopener' } : {}) }
+          ? {
+              href: r.url,
+              ...(r.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}),
+            }
           : {};
         return (
           <>

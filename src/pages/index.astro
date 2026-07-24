@@ -49,7 +49,7 @@ const parts = (latest?.metric ?? '').split('→').map((s) => s.trim());
         latest && (
           <>
             <p class="eyebrow" style="margin-top:2rem;">latest · {latest.date}</p>
-            <a href={latest.url} rel="noopener" style="text-decoration:none;">
+            <a href={latest.url} target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
               <div class="metricline">
                 {parts.length === 2 ? (
                   <>

@@ -45,6 +45,10 @@ export type Stop = {
   label: string;
   does: string; // its one responsibility
   tone?: 'in' | 'work' | 'out' | 'planned';
+  // The decision behind this stop, if there was a real one. adr points at a
+  // record on /decisions; the wording here is the short form of its trade-off.
+  why?: string;
+  adr?: string;
 };
 
 export type Line = {
@@ -71,20 +75,62 @@ export const details: Record<SystemId, Detail> = {
         note: 'what happens when someone asks something',
         stops: [
           { label: 'question', does: 'plain English, from the demo page', tone: 'in' },
-          { label: 'embed', does: 'one pinned embedding model', tone: 'work' },
-          { label: 'retrieve', does: 'top-k over page chunks in pgvector', tone: 'work' },
-          { label: 'generate', does: 'Claude answers from the retrieved pages only', tone: 'work' },
-          { label: 'answer + page', does: 'structured citation, never inline guesswork', tone: 'out' },
+          {
+            label: 'embed',
+            does: 'one pinned embedding model',
+            tone: 'work',
+            why: 'Pinned and guarded at insert, because changing it later invalidates every stored vector. Chose the small model over one costing several times more.',
+            adr: '0003',
+          },
+          {
+            label: 'retrieve',
+            does: 'top-k over page chunks in pgvector',
+            tone: 'work',
+            why: 'Vectors live in Postgres rather than a dedicated vector database, so citations join to their text in one query. Good to roughly a million vectors, then this gets superseded.',
+            adr: '0002',
+          },
+          {
+            label: 'generate',
+            does: 'the cheap model tier answers, from retrieved pages only',
+            tone: 'work',
+            why: 'The model name is an env var, so the quality-versus-cost question stays measurable instead of argued.',
+            adr: '0005',
+          },
+          {
+            label: 'answer + page',
+            does: 'structured citation, never inline guesswork',
+            tone: 'out',
+            why: 'Citations come back as data, not as markers in prose, so a hallucinated one fails loudly instead of rendering a wrong link. Chunks never span two pages for the same reason.',
+            adr: '0006',
+          },
         ],
       },
       {
         name: 'eval line',
         note: 'runs on demand over the same stops, with known-good questions',
         stops: [
-          { label: 'golden set', does: 'questions with known answers, in the repo', tone: 'in' },
-          { label: 'retrieve', does: 'same retriever, scored on recall', tone: 'work' },
+          {
+            label: 'golden set',
+            does: 'questions with known answers, in the repo',
+            tone: 'in',
+            why: 'Ground truth is a file in version control, so editing it to flatter a number shows up in review.',
+            adr: '0012',
+          },
+          {
+            label: 'retrieve',
+            does: 'same retriever, scored on recall',
+            tone: 'work',
+            why: 'Hybrid search and a reranker were both measured here. Neither earned a place in the live path.',
+            adr: '0014',
+          },
           { label: 'generate', does: 'same prompt path', tone: 'work' },
-          { label: 'judge', does: 'the other model grades the answer', tone: 'work' },
+          {
+            label: 'judge',
+            does: 'a different vendor grades the answer',
+            tone: 'work',
+            why: 'A model grading its own output shares its own blind spots. Exact match fails on paraphrase and similarity is too kind to wrong-but-close answers.',
+            adr: '0007',
+          },
           { label: 'score', does: 'recall and answer pass rate', tone: 'out' },
         ],
       },
@@ -108,11 +154,26 @@ export const details: Record<SystemId, Detail> = {
         name: 'publish line',
         note: 'from a commit to the page in front of you',
         stops: [
-          { label: 'edit', does: 'a data file or a page, in the repo', tone: 'in' },
+          {
+            label: 'edit',
+            does: 'a data file or a page, in the repo',
+            tone: 'in',
+            why: 'Content is typed data rather than a CMS. Adding an article is one line; there is no admin to log into and nothing to keep patched.',
+          },
           { label: 'push', does: 'to main, which is the only trigger', tone: 'work' },
-          { label: 'build', does: 'Astro renders every page to static html', tone: 'work' },
+          {
+            label: 'build',
+            does: 'every page rendered to static html',
+            tone: 'work',
+            why: 'Static over a server, so a bad deploy cannot take the site down: the previous build keeps serving.',
+          },
           { label: 'deploy', does: 'assets go to the edge', tone: 'work' },
-          { label: 'read', does: 'served from the city nearest you', tone: 'out' },
+          {
+            label: 'read',
+            does: 'served from the city nearest you',
+            tone: 'out',
+            why: 'No trackers and no third-party scripts, which is most of why it loads the way it does.',
+          },
         ],
       },
     ],

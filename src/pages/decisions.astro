@@ -1,0 +1,149 @@
+---
+import Base from '../layouts/Base.astro';
+import { decisions, adrUrl, REPO_ADR_INDEX } from '../data/decisions';
+
+const accepted = decisions.filter((d) => d.status === 'accepted').length;
+const superseded = decisions.filter((d) => d.status === 'superseded').length;
+const statusLabel = {
+  accepted: 'accepted',
+  superseded: 'superseded',
+  'measured-wrong': 'prediction was wrong',
+} as const;
+---
+
+<Base
+  title="Decisions"
+  description="Every architectural decision on payments-rag: what was chosen, what was turned down, and what it costs."
+>
+  <h1>Decisions</h1>
+  <p class="lede">
+    Every decision on payments-rag, with the alternative that lost and the price of the one that
+    won. Writing the cost down is the part that keeps a decision honest.
+  </p>
+  <p class="eyebrow">
+    {decisions.length} records · {accepted} standing · {superseded} superseded in the open
+  </p>
+
+  <div class="dlist">
+    {
+      decisions.map((d) => (
+        <article class={`d d-${d.status}`}>
+          <header class="d-head">
+            <span class="d-id">ADR-{d.id}</span>
+            <span class={`d-status s-${d.status}`}>{statusLabel[d.status]}</span>
+            <span class="d-date">{d.date}</span>
+          </header>
+          <h2>{d.title}</h2>
+          <dl class="d-body">
+            <dt>chose</dt>
+            <dd>{d.chose}</dd>
+            <dt>instead of</dt>
+            <dd>{d.insteadOf}</dd>
+            <dt>the cost</dt>
+            <dd class="d-cost">{d.cost}</dd>
+          </dl>
+          <p class="meta">
+            {d.note && <span class="d-note">{d.note} · </span>}
+            <a href={adrUrl(d)} target="_blank" rel="noopener noreferrer">full record ↗</a>
+          </p>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="meta outro">
+    These live beside the code they govern: <a href={REPO_ADR_INDEX} target="_blank" rel="noopener noreferrer">all records in the repo ↗</a>
+  </p>
+</Base>
+
+<style>
+  .lede {
+    max-width: 60ch;
+  }
+  .dlist {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .d {
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--ok);
+    border-radius: 6px;
+    padding: 1rem 1.15rem;
+  }
+  .d-superseded {
+    border-left-color: var(--dim);
+    border-left-style: dashed;
+  }
+  .d-measured-wrong {
+    border-left-color: var(--accent);
+  }
+  .d-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .d-id {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .s-accepted {
+    color: var(--ok);
+  }
+  .s-superseded {
+    color: var(--dim);
+  }
+  .s-measured-wrong {
+    color: var(--accent);
+  }
+  .d-date {
+    color: var(--dim);
+    margin-left: auto;
+  }
+  .d h2 {
+    font-size: 1rem;
+    margin: 0.45rem 0 0.7rem;
+    line-height: 1.45;
+  }
+  .d-body {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 0.35rem 0.9rem;
+    margin: 0 0 0.7rem;
+    font-size: 0.85rem;
+  }
+  .d-body dt {
+    color: var(--dim);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 0.15rem;
+  }
+  .d-body dd {
+    margin: 0;
+    color: var(--fg);
+  }
+  .d-cost {
+    color: var(--dim) !important;
+  }
+  .d-note {
+    color: var(--accent-dim);
+  }
+  @media (max-width: 560px) {
+    .d-body {
+      grid-template-columns: 1fr;
+      gap: 0.1rem;
+    }
+    .d-body dd {
+      margin-bottom: 0.5rem;
+    }
+  }
+  .outro {
+    margin-top: 1.75rem;
+  }
+</style>

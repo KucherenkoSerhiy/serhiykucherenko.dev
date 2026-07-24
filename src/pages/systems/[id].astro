@@ -13,7 +13,7 @@ const detail = details[system.id as SystemId];
 
 <Base title={system.name} description={`Level 2: how ${system.name} is put together — ${detail.headline}`}>
   <p class="eyebrow" style="margin-bottom:0.35rem;">
-    <a href="/systems/" style="color:var(--dim);text-decoration:none;">← build</a> · level 2
+    <a href="/systems/" style="color:var(--dim);text-decoration:none;">← systems</a> · level 2
   </p>
   <h1>{system.name}</h1>
   <p class="lede">{detail.headline}</p>
@@ -34,6 +34,16 @@ const detail = details[system.id as SystemId];
               <span class="stop-body">
                 <span class="stop-label">{stop.label}</span>
                 <span class="stop-does">{stop.does}</span>
+                {stop.why && (
+                  <span class="stop-why">
+                    {stop.why}
+                    {stop.adr && (
+                      <a href="/decisions/" class="stop-adr">
+                        ADR-{stop.adr}
+                      </a>
+                    )}
+                  </span>
+                )}
               </span>
             </li>
           ))}
@@ -166,6 +176,30 @@ const detail = details[system.id as SystemId];
     display: block;
     color: var(--dim);
     font-size: 0.8rem;
+  }
+  .stop-why {
+    display: block;
+    margin-top: 0.4rem;
+    padding-left: 0.7rem;
+    border-left: 1px solid var(--accent-dim);
+    color: var(--fg);
+    font-size: 0.8rem;
+    max-width: 60ch;
+  }
+  .stop-adr {
+    display: inline-block;
+    margin-left: 0.4rem;
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    border: 1px solid var(--accent-dim);
+    border-radius: 3px;
+    padding: 0 0.3rem;
+    white-space: nowrap;
+  }
+  .stop-adr:hover {
+    border-color: var(--accent);
   }
 
   .runson {

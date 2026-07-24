@@ -1,12 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import { articles } from '../data/articles';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-const latest = posts[0];
-const parts = (latest?.data.metric ?? '').split('→').map((s) => s.trim());
+const latest = [...articles].sort((a, b) => (a.date < b.date ? 1 : -1))[0];
+const parts = (latest?.metric ?? '').split('→').map((s) => s.trim());
 ---
 
 <Base>
@@ -51,10 +48,8 @@ const parts = (latest?.data.metric ?? '').split('→').map((s) => s.trim());
       {
         latest && (
           <>
-            <p class="eyebrow" style="margin-top:2rem;">
-              latest · {latest.data.pubDate.toISOString().slice(0, 10)}
-            </p>
-            <a href={`/blog/${latest.id}/`} style="text-decoration:none;">
+            <p class="eyebrow" style="margin-top:2rem;">latest · {latest.date}</p>
+            <a href={latest.url} rel="noopener" style="text-decoration:none;">
               <div class="metricline">
                 {parts.length === 2 ? (
                   <>
@@ -67,8 +62,9 @@ const parts = (latest?.data.metric ?? '').split('→').map((s) => s.trim());
                 )}
               </div>
               <div style="color:var(--fg);margin-top:0.4rem;">
-                {latest.data.title} <span style="color:var(--accent)">→</span>
+                {latest.title} <span style="color:var(--accent)">↗</span>
               </div>
+              <div class="meta" style="margin-top:0.2rem;">read on {latest.where}</div>
             </a>
           </>
         )

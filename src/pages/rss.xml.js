@@ -1,18 +1,18 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { articles } from '../data/articles';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 export async function GET(context) {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
   return rss({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     site: context.site,
-    items: posts.map((post) => ({
-      title: post.data.title,
-      description: post.data.description,
-      pubDate: post.data.pubDate,
-      link: `/blog/${post.id}/`,
+    // Articles live on their publishing platform; the feed points there.
+    items: articles.map((a) => ({
+      title: a.title,
+      description: a.metric,
+      pubDate: new Date(a.date + 'T09:00:00Z'),
+      link: a.url,
     })),
   });
 }

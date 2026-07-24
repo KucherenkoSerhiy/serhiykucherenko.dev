@@ -1,9 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import { articles } from '../../data/articles';
 import { milestones } from '../../data/shiplog';
-
-const posts = await getCollection('blog', ({ data }) => !data.draft);
 
 type Row = {
   date: string;
@@ -12,33 +10,49 @@ type Row = {
   sub: string;
   metric: string;
   metricTone: 'accent' | 'ok';
-  href?: string;
+  url?: string;
+  external?: boolean;
 };
 
-const postRows: Row[] = posts.map((p) => ({
-  date: p.data.pubDate.toISOString().slice(0, 10),
-  kind: 'article',
-  title: p.data.title,
-  sub: 'article',
-  metric: p.data.metric ?? '',
-  metricTone: 'accent',
-  href: `/blog/${p.id}/`,
-}));
-
-const rows: Row[] = [...postRows, ...milestones].sort((a, b) => (a.date < b.date ? 1 : -1));
+const rows: Row[] = [
+  ...articles.map(
+    (a): Row => ({
+      date: a.date,
+      kind: 'article',
+      title: a.title,
+      sub: `read on ${a.where} ↗`,
+      metric: a.metric,
+      metricTone: 'accent',
+      url: a.url,
+      external: true,
+    })
+  ),
+  ...milestones.map(
+    (m): Row => ({
+      date: m.date,
+      kind: m.kind,
+      title: m.title,
+      sub: m.sub,
+      metric: m.metric,
+      metricTone: m.metricTone,
+      url: m.href,
+      external: !!m.href,
+    })
+  ),
+].sort((a, b) => (a.date < b.date ? 1 : -1));
 
 const kindLabel: Record<Row['kind'], string> = {
   article: 'wrote',
   ship: 'shipped',
   milestone: 'milestone',
 };
-const fmt = (iso: string) => {
-  const d = new Date(iso + 'T00:00:00Z');
-  return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', timeZone: 'UTC' }).toLowerCase();
-};
+const fmt = (iso: string) =>
+  new Date(iso + 'T00:00:00Z')
+    .toLocaleDateString('en-US', { month: 'short', day: '2-digit', timeZone: 'UTC' })
+    .toLowerCase();
 ---
 
-<Base title="Ship log" description="Everything that shipped or changed, newest first. Articles, releases, milestones.">
+<Base title="Ship log" description="Articles, releases and milestones, newest first. Articles link out to where they were published.">
   <h1>ship log</h1>
   <p class="eyebrow" style="margin-top:0.5rem;">everything that shipped or changed — newest first</p>
 
@@ -51,7 +65,10 @@ const fmt = (iso: string) => {
   <div class="timeline">
     {
       rows.map((r, i) => {
-        const Wrapper = r.href ? 'a' : 'div';
+        const Wrapper = r.url ? 'a' : 'div';
+        const linkAttrs = r.url
+          ? { href: r.url, ...(r.external ? { rel: 'noopener' } : {}) }
+          : {};
         return (
           <>
             <div class="tl-when">
@@ -63,8 +80,10 @@ const fmt = (iso: string) => {
               <div class={`node n-${r.kind}`}></div>
             </div>
             <div class="tl-body">
-              <Wrapper {...(r.href ? { href: r.href } : {})} class={r.href ? '' : 'static'}>
-                {r.metric && <div class={`tl-metric m-${r.metricTone === 'ok' ? 'ship' : 'article'}`}>{r.metric}</div>}
+              <Wrapper {...linkAttrs} class={r.url ? '' : 'static'}>
+                {r.metric && (
+                  <div class={`tl-metric m-${r.metricTone === 'ok' ? 'ship' : 'article'}`}>{r.metric}</div>
+                )}
                 <div class="tl-title">{r.title}</div>
                 <div class="tl-sub">{r.sub}</div>
               </Wrapper>

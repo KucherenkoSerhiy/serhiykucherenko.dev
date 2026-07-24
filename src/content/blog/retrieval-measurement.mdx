@@ -1,0 +1,85 @@
+---
+title: "When 60% recall meant 90% accuracy: a RAG measurement story"
+description: "The obvious fix did nothing and the impressive one rescued a single question. The real problem was in the measuring stick."
+pubDate: 2026-07-24
+tags: [rag, retrieval, pgvector, evaluation, ranking]
+metric: "6/10 → 9/10"
+draft: false
+# TODO before publishing: set draft: false and add canonicalUrl from the LinkedIn article
+---
+
+import Waterfall from '../../components/diagrams/Waterfall.astro';
+import BeforeAfter from '../../components/diagrams/BeforeAfter.astro';
+
+<Waterfall
+  caption="fig.1 — three measuring sticks, one retriever"
+  rows={[
+    { label: 'recall@5, labelled page', value: '6/10', percent: 60, tone: 'accent' },
+    { label: 'answer eval, pass rate', value: '9/10', percent: 90, tone: 'ok' },
+    { label: 'recall, fact in any chunk', value: '9/10', percent: 90, tone: 'ok' },
+  ]}
+  footnote="Two of these agree. The one that disagreed was the one I trusted."
+/>
+
+Retrieval recall sat at 0.60 and would not move. Hybrid search did nothing. A reranker rescued exactly one question, and cost seconds per query to do it. The number that finally explained everything came from neither technique. It came from reading what the retriever had actually pulled back.
+
+## Two numbers that shouldn't coexist
+
+payments-rag is a small RAG over two SEPA payment rulebooks. One eval checks whether the labelled page lands in the top 5 retrieved chunks. Another checks whether the final answer is correct.
+
+The two evals disagreed. Recall@5 read 0.60, six of ten. The answer eval read 84.8 out of 100, a 90% pass rate. If the right page misses the top 5 four times in ten, how do nine answers in ten come out fine? That gap was the whole story.
+
+## Hybrid search: no lift
+
+Hybrid retrieval was the obvious first move: vector similarity plus keyword search, combined. *(The first run looked broken for a dumb reason: Postgres's plainto_tsquery ANDs every query word by default. Fixed the operator before the real measurement.)*
+
+The fair result was 0.60 to 0.60. Zero. Vector stayed the default.
+
+## A reranker hits its ceiling
+
+A reranker was the fashionable next move, and it did move the number.
+
+<BeforeAfter
+  caption="fig.2 — the reranker's ceiling"
+  before="recall@5 0.60"
+  after="recall@5 0.70"
+  note="it re-scores the top-20 fanout, so recall@20 = 0.70 is the hard ceiling"
+/>
+
+But 0.70 was not a random landing spot. It promoted every fetchable page into the top 5. The remaining misses were never retrieved in the first place, so no amount of reordering could reach them. Worth building to understand the mechanism, but it costs seconds per query and stays eval-only.
+
+## The misses weren't misses
+
+A recall miss hides two very different failures: the content was fetched but ranked low, or it was never fetched at all. Reranking and hybrid only reorder what was fetched, so neither could touch the second kind. To tell them apart, I re-ran retrieval on each of the four misses and searched the full text of every retrieved chunk for the answer fact itself. Not the labelled page. The fact.
+
+Three of the four had the fact sitting in a retrieved chunk, on a page I had never labelled. For the remittance-length question, the labelled page 21 held no answer, but pages 22, 64, and 148 in the same top 5 all carried "140 characters". Recall@5 checks only for page 21, reports a miss, and the answer was correct the whole time.
+
+My golden set pointed at one correct page among several, and recall@5 punished the retriever for finding a different correct one. I spent a Tuesday convinced it was broken. It wasn't.
+
+Count "fact present in any retrieved chunk" instead of "labelled page in the top-k" and retrieval scores 9/10, exactly the answer eval's pass rate. The two numbers reconcile.
+
+The fourth miss, currency, is the real one. "Euro" appeared in none of the retrieved chunks, and currency is the single question that scored 0 on the answer eval. Every LLM knows SEPA runs in euro, yet the model refused to answer without a grounded chunk. For a citation tool, failing out loud beats papering over a gap with training knowledge.
+
+## Coarse chunks: why the page ranks low
+
+Why did the right page rank low in the first place? Each page-sized chunk embeds hundreds of words, averaging the answer together with the legal scaffolding around it. The further your wording drifts from the specification's own, the lower that chunk ranks. One fact on page 26, retrieved under three wordings:
+
+<Waterfall
+  caption="fig.3 — same fact, three phrasings, k=10 (longer bar is worse)"
+  rows={[
+    { label: "spec's own wording", value: 'rank 1', percent: 10, tone: 'ok' },
+    { label: 'natural phrasing A', value: 'rank 8', percent: 80, tone: 'accent' },
+    { label: 'natural phrasing B', value: 'rank 9', percent: 90, tone: 'accent' },
+  ]}
+  footnote="The rank tracks how far your phrasing sits from the spec's."
+/>
+
+## What carries over
+
+- Split "ranked low" from "never fetched" before you tune. Reranking and hybrid reorder the fetched set; they cannot conjure a missing page. Both were aimed at the wrong problem here.
+- Literature numbers don't transfer. Big-corpus hybrid gains say nothing about a 2-document, 10-question set. Small corpora behave differently, and 10 questions is a noisy ruler.
+- Label your golden set to the fact, not to one page. A single "correct" page turns real hits into phantom misses, which is the whole reason these two numbers ever disagreed.
+
+*One honest caveat: that soft recall, fact-present-in-any-chunk, is still a manual check, not a built eval. For now I ship the strict 6/10.*
+
+I started the week thinking the retriever found the right answer 60% of the time. It was finding it 90% of the time. The metric was wrong, not the retriever.

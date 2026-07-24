@@ -12,7 +12,7 @@ export type Experiment = {
 
 export const experiments: Experiment[] = [
   {
-    question: 'Does hybrid search beat plain vector retrieval on a two-document corpus?',
+    question: 'What does hybrid search actually buy on a two-document corpus?',
     state: 'answered',
     context: 'payments-rag · recall stuck at 0.60',
     finding: 'No lift at all. Big-corpus results from the literature did not transfer. Vector stayed the default.',
@@ -23,7 +23,7 @@ export const experiments: Experiment[] = [
     },
   },
   {
-    question: 'Can a reranker rescue the retrieval misses?',
+    question: 'How much of a retrieval miss can a reranker actually rescue?',
     state: 'answered',
     context: 'payments-rag · the fashionable next move',
     finding:
@@ -35,7 +35,7 @@ export const experiments: Experiment[] = [
     },
   },
   {
-    question: 'Was retrieval broken, or was the metric?',
+    question: 'Why do two evals of the same system disagree?',
     state: 'answered',
     context: 'payments-rag · two evals disagreeing',
     finding:
@@ -47,16 +47,17 @@ export const experiments: Experiment[] = [
     },
   },
   {
-    question: 'Can a public LLM demo stay inside a fixed daily budget?',
+    question: 'How far can a public LLM demo be pushed before the budget bites?',
     state: 'open',
     context: 'payments-rag · open to anyone, no sign-in',
-    finding: 'Running now behind rate limits and a hard daily cap. The question is whether the cap ever bites.',
+    finding: 'Live behind rate limits and a hard daily cap. Nobody has found the ceiling yet, which is itself the uninteresting half of the answer.',
     evidence: { label: 'try it', url: 'https://rag.serhiykucherenko.dev' },
   },
   {
-    question: 'Is a ten-question golden set enough to trust a number?',
+    question: 'How do you pick a golden set worth trusting?',
     state: 'open',
     context: 'payments-rag · every eval rests on it',
-    finding: 'Ten questions is a noisy ruler. Unresolved until the set grows or the noise is quantified.',
+    finding:
+      'Ten questions is a noisy ruler, and picking more of them is not obviously the fix. What makes a question worth including is the open part.',
   },
 ];

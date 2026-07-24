@@ -1,0 +1,175 @@
+---
+import Base from '../../layouts/Base.astro';
+import { systems } from '../../data/architecture';
+---
+
+<Base
+  title="Build"
+  description="Level 1: the systems and what they talk to. Each one zooms in to its own diagram."
+>
+  <h1>Build</h1>
+  <p class="eyebrow" style="margin-top:0.5rem;">
+    level 1 — the whole picture · no internals here, each system zooms in
+  </p>
+
+  <svg class="ctx" viewBox="0 0 680 396" role="img" aria-labelledby="ctx-t ctx-d">
+    <title id="ctx-t">System context</title>
+    <desc id="ctx-d">
+      A visitor reads the site and asks payments-rag questions. The site is served from
+      Cloudflare. payments-rag searches a Neon Postgres corpus and calls Claude and GPT. A
+      planned gateway would sit between payments-rag and the model providers.
+    </desc>
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--dim)" />
+      </marker>
+      <marker id="ahp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)" />
+      </marker>
+    </defs>
+
+    <!-- visitor -->
+    <g>
+      <rect x="8" y="96" width="128" height="62" rx="4" fill="none" stroke="var(--dim)" stroke-width="1.5" />
+      <circle cx="72" cy="118" r="8" fill="none" stroke="var(--dim)" stroke-width="1.5" />
+      <path d="M58 142c0-9 6-14 14-14s14 5 14 14" fill="none" stroke="var(--dim)" stroke-width="1.5" />
+      <text x="72" y="153" text-anchor="middle" fill="var(--dim)" font-size="10">reader · client</text>
+    </g>
+
+    <!-- site -->
+    <a href="/build/site/">
+      <rect x="196" y="22" width="212" height="62" rx="4" fill="color-mix(in srgb, var(--ok) 10%, transparent)" stroke="var(--ok)" stroke-width="1.5" />
+      <text x="302" y="46" text-anchor="middle" fill="var(--bright)" font-size="13" font-weight="700">serhiykucherenko.dev</text>
+      <text x="302" y="63" text-anchor="middle" fill="var(--dim)" font-size="10">writing · projects · contact</text>
+      <text x="302" y="77" text-anchor="middle" fill="var(--accent)" font-size="10">zoom in ↓</text>
+    </a>
+
+    <!-- payments-rag -->
+    <a href="/build/payments-rag/">
+      <rect x="196" y="150" width="212" height="62" rx="4" fill="color-mix(in srgb, var(--ok) 10%, transparent)" stroke="var(--ok)" stroke-width="1.5" />
+      <text x="302" y="174" text-anchor="middle" fill="var(--bright)" font-size="13" font-weight="700">payments-rag</text>
+      <text x="302" y="191" text-anchor="middle" fill="var(--dim)" font-size="10">answers with the page cited</text>
+      <text x="302" y="205" text-anchor="middle" fill="var(--accent)" font-size="10">zoom in ↓</text>
+    </a>
+
+    <!-- gateway, planned -->
+    <a href="/build/gateway/">
+      <rect x="196" y="296" width="212" height="58" rx="4" fill="none" stroke="var(--dim)" stroke-width="1.5" stroke-dasharray="5 4" />
+      <text x="302" y="320" text-anchor="middle" fill="var(--fg)" font-size="13" font-weight="700">llm-cost-gateway</text>
+      <text x="302" y="336" text-anchor="middle" fill="var(--dim)" font-size="10">planned · caches and meters</text>
+      <text x="302" y="349" text-anchor="middle" fill="var(--accent)" font-size="10">zoom in ↓</text>
+    </a>
+
+    <!-- externals -->
+    <g>
+      <rect x="470" y="26" width="196" height="54" rx="4" fill="color-mix(in srgb, var(--accent) 7%, transparent)" stroke="var(--accent)" stroke-width="1.5" />
+      <text x="568" y="48" text-anchor="middle" fill="var(--accent)" font-size="12" font-weight="700">Cloudflare</text>
+      <text x="568" y="65" text-anchor="middle" fill="var(--dim)" font-size="10">build · edge · waf</text>
+    </g>
+    <g>
+      <rect x="470" y="126" width="196" height="54" rx="4" fill="color-mix(in srgb, var(--accent) 7%, transparent)" stroke="var(--accent)" stroke-width="1.5" />
+      <text x="568" y="148" text-anchor="middle" fill="var(--accent)" font-size="12" font-weight="700">Neon Postgres</text>
+      <text x="568" y="165" text-anchor="middle" fill="var(--dim)" font-size="10">pgvector · SEPA corpus</text>
+    </g>
+    <g>
+      <rect x="470" y="222" width="196" height="54" rx="4" fill="color-mix(in srgb, var(--accent) 7%, transparent)" stroke="var(--accent)" stroke-width="1.5" />
+      <text x="568" y="244" text-anchor="middle" fill="var(--accent)" font-size="12" font-weight="700">Claude · GPT</text>
+      <text x="568" y="261" text-anchor="middle" fill="var(--dim)" font-size="10">one answers, one judges</text>
+    </g>
+
+    <!-- relations -->
+    <path d="M136 112 H 190" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
+    <text x="163" y="104" text-anchor="middle" fill="var(--dim)" font-size="9">reads</text>
+    <path d="M136 145 H 190" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
+    <text x="163" y="139" text-anchor="middle" fill="var(--dim)" font-size="9">asks</text>
+
+    <path d="M408 53 H 464" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
+    <text x="436" y="46" text-anchor="middle" fill="var(--dim)" font-size="9">served by</text>
+
+    <path d="M408 168 H 464" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
+    <text x="436" y="161" text-anchor="middle" fill="var(--dim)" font-size="9">searches</text>
+
+    <path d="M408 198 H 436 V 243 H 464" fill="none" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ah)" />
+    <text x="446" y="216" text-anchor="start" fill="var(--dim)" font-size="9">calls</text>
+
+    <path d="M330 296 V 243 H 430" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ahp)" />
+    <text x="338" y="268" text-anchor="start" fill="var(--accent)" font-size="9">would sit here</text>
+  </svg>
+
+  <div class="zoomrow">
+    {
+      systems.map((s) => (
+        <a class={`zoomcard${s.state === 'planned' ? ' planned' : ''}`} href={`/build/${s.id}/`}>
+          <span class="zc-state">{s.state === 'planned' ? '◐ planned' : '● live'}</span>
+          <span class="zc-name">{s.name}</span>
+          <span class="zc-what">{s.what}</span>
+          <span class="zc-go">open level 2 →</span>
+        </a>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .ctx {
+    width: 100%;
+    height: auto;
+    font-family: var(--mono);
+    margin: 0.5rem 0 1.5rem;
+  }
+  .ctx a rect {
+    transition: stroke 0.15s;
+  }
+  .ctx a:hover rect {
+    stroke: var(--accent);
+  }
+
+  .zoomrow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  @media (max-width: 640px) {
+    .zoomrow {
+      grid-template-columns: 1fr;
+    }
+  }
+  .zoomcard {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.85rem 0.9rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .zoomcard:hover {
+    border-color: var(--accent);
+  }
+  .zoomcard.planned {
+    border-style: dashed;
+  }
+  .zc-state {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ok);
+  }
+  .zoomcard.planned .zc-state {
+    color: var(--accent);
+  }
+  .zc-name {
+    color: var(--bright);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .zc-what {
+    color: var(--dim);
+    font-size: 0.75rem;
+  }
+  .zc-go {
+    color: var(--accent);
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+  }
+</style>

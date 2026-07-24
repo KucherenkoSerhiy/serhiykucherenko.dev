@@ -1,0 +1,205 @@
+---
+import Base from '../../layouts/Base.astro';
+import { systems, details } from '../../data/architecture';
+import type { SystemId } from '../../data/architecture';
+
+export function getStaticPaths() {
+  return systems.map((s) => ({ params: { id: s.id }, props: { system: s } }));
+}
+
+const { system } = Astro.props;
+const detail = details[system.id as SystemId];
+---
+
+<Base title={system.name} description={`Level 2: how ${system.name} is put together — ${detail.headline}`}>
+  <p class="eyebrow" style="margin-bottom:0.35rem;">
+    <a href="/build/" style="color:var(--dim);text-decoration:none;">← build</a> · level 2
+  </p>
+  <h1>{system.name}</h1>
+  <p class="lede">{detail.headline}</p>
+
+  {
+    detail.lines.map((line) => (
+      <section class={`line${line.planned ? ' line-planned' : ''}`}>
+        <p class="eyebrow line-head">
+          {line.name} — <span class="line-note">{line.note}</span>
+        </p>
+        <ol class="stops">
+          {line.stops.map((stop, i) => (
+            <li class={`stop stop-${stop.tone ?? 'work'}`}>
+              <span class="rail" aria-hidden="true">
+                <span class="dot" />
+                {i < line.stops.length - 1 && <span class="track" />}
+              </span>
+              <span class="stop-body">
+                <span class="stop-label">{stop.label}</span>
+                <span class="stop-does">{stop.does}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))
+  }
+
+  <section class="runson">
+    <p class="eyebrow">runs on</p>
+    <div class="chips">
+      {
+        detail.runsOn.map((r) => (
+          <span class="chip">
+            <b>{r.label}</b>
+            {r.note}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  {
+    detail.notes && (
+      <ul class="plain notes">
+        {detail.notes.map((n) => (
+          <li>{n}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  <p class="meta links">
+    {system.demo && (
+      <a href={system.demo} target="_blank" rel="noopener noreferrer">
+        {system.id === 'site' ? 'you are here' : 'run demo ↗'}
+      </a>
+    )}
+    {system.demo && system.source && ' · '}
+    {system.source && (
+      <a href={system.source} target="_blank" rel="noopener noreferrer">
+        source ↗
+      </a>
+    )}
+  </p>
+</Base>
+
+<style>
+  .lede {
+    color: var(--fg);
+    max-width: 58ch;
+    margin-top: 0.3rem;
+  }
+  .line {
+    margin: 2rem 0;
+  }
+  .line-head {
+    margin-bottom: 0.9rem;
+    color: var(--accent);
+  }
+  .line-note {
+    color: var(--dim);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .line-planned .line-head {
+    color: var(--dim);
+  }
+
+  .stops {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .stop {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 0 0.85rem;
+  }
+  .rail {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2.5px solid var(--accent);
+    background: var(--bg);
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .track {
+    flex: 1;
+    width: 3px;
+    background: var(--accent);
+    margin: 2px 0 -2px;
+  }
+  .stop-in .dot {
+    border-color: var(--dim);
+  }
+  .stop-out .dot {
+    border-color: var(--ok);
+    background: var(--ok);
+  }
+  .stop-planned .dot {
+    border-style: dashed;
+    border-color: var(--dim);
+  }
+  .line-planned .track,
+  .stop-planned + .stop .track {
+    background: color-mix(in srgb, var(--dim) 45%, transparent);
+  }
+  .line-planned .dot {
+    border-color: var(--dim);
+  }
+
+  .stop-body {
+    padding-bottom: 1.1rem;
+  }
+  .stop-label {
+    display: block;
+    color: var(--bright);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .stop-does {
+    display: block;
+    color: var(--dim);
+    font-size: 0.8rem;
+  }
+
+  .runson {
+    margin: 2rem 0 1.25rem;
+  }
+  .chips {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .chip {
+    border: 1px solid var(--accent);
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+    border-radius: 4px;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.75rem;
+    color: var(--dim);
+  }
+  .chip b {
+    display: block;
+    color: var(--accent);
+    font-size: 0.82rem;
+  }
+
+  .notes {
+    color: var(--dim);
+    font-size: 0.85rem;
+    border-left: 2px solid var(--line);
+    padding-left: 1rem;
+  }
+  .notes li {
+    margin-bottom: 0.5rem;
+  }
+  .links {
+    margin-top: 1.5rem;
+  }
+</style>

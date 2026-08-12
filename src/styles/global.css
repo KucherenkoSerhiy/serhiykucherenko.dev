@@ -1,45 +1,45 @@
 :root {
   color-scheme: dark;
-  --bg: #0c0e11;
-  --panel: #12151a;
-  --line: #232830;
-  --fg: #d6d9de;
-  --bright: #ffffff;
-  --dim: #7d848e;
-  --accent: #ffb454;
-  --accent-dim: #b08d55;
-  --ok: #7fbf7f;
+  --bg: #15181d;
+  --panel: #1b1f25;
+  --line: #2a3038;
+  --fg: #c5cad1;
+  --bright: #eef1f4;
+  --dim: #858c96;
+  --accent: #e8a355;
+  --accent-dim: #a4855a;
+  --ok: #7ab77a;
   --mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Menlo, Consolas, monospace;
 
   /* code highlighting (Shiki css-variables theme) — contrast-safe, Wire palette */
-  --astro-code-color-text: #d6d9de;
-  --astro-code-color-background: #12151a;
+  --astro-code-color-text: #c5cad1;
+  --astro-code-color-background: #1b1f25;
   --astro-code-token-comment: #8b929c;
-  --astro-code-token-keyword: #ffb454;
-  --astro-code-token-string: #7fbf7f;
-  --astro-code-token-string-expression: #7fbf7f;
+  --astro-code-token-keyword: #e8a355;
+  --astro-code-token-string: #7ab77a;
+  --astro-code-token-string-expression: #7ab77a;
   --astro-code-token-constant: #e6b17a;
-  --astro-code-token-function: #d6d9de;
+  --astro-code-token-function: #c5cad1;
   --astro-code-token-punctuation: #9aa0a8;
-  --astro-code-token-parameter: #d6d9de;
-  --astro-code-token-link: #ffb454;
+  --astro-code-token-parameter: #c5cad1;
+  --astro-code-token-link: #e8a355;
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #f7f6f1;
-  --panel: #ffffff;
+  --bg: #f2f0ea;
+  --panel: #fbfaf6;
   --line: #e3e2dd;
-  --fg: #1b1c1e;
-  --bright: #000000;
+  --fg: #33353a;
+  --bright: #17181b;
   /* design spec says #8b8e93; darkened to clear WCAG AA on paper ground */
-  --dim: #6b6e74;
+  --dim: #676a70;
   --accent: #9a6210;
   --accent-dim: #7c5d20;
   --ok: #3f7d3f;
 
-  --astro-code-color-text: #1b1c1e;
-  --astro-code-color-background: #ffffff;
+  --astro-code-color-text: #33353a;
+  --astro-code-color-background: #fbfaf6;
   --astro-code-token-comment: #66686e;
   --astro-code-token-keyword: #9a6210;
   --astro-code-token-string: #3f7d3f;
@@ -59,14 +59,14 @@ html {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--mono);
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 16.5px;
+  line-height: 1.7;
 }
 
 body {
   margin: 0 auto;
-  max-width: 46rem;
-  padding: 0 1.25rem;
+  max-width: 58rem;
+  padding: 0 1.5rem;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -284,8 +284,8 @@ ul.plain {
 /* landing hero */
 .hero {
   position: relative;
-  margin: 0 -1.25rem;
-  padding: 2.5rem 1.25rem 2.75rem;
+  margin: 0 -1.5rem;
+  padding: 2.5rem 1.5rem 2.75rem;
   overflow: hidden;
 }
 

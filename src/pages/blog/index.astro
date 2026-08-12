@@ -12,6 +12,7 @@ type Row = {
   metricTone: 'accent' | 'ok';
   url?: string;
   external?: boolean;
+  mirrors?: { where: string; url: string }[];
 };
 
 const rows: Row[] = [
@@ -25,6 +26,7 @@ const rows: Row[] = [
       metricTone: 'accent',
       url: a.url,
       external: true,
+      mirrors: a.also,
     })
   ),
   ...milestones.map(
@@ -90,6 +92,21 @@ const fmt = (iso: string) =>
                 <div class="tl-title">{r.title}</div>
                 <div class="tl-sub">{r.sub}</div>
               </Wrapper>
+              {
+                r.mirrors && r.mirrors.length > 0 && (
+                  <div class="tl-mirrors">
+                    also on{' '}
+                    {r.mirrors.map((m, j) => (
+                      <>
+                        {j > 0 && ' · '}
+                        <a href={m.url} target="_blank" rel="noopener noreferrer">
+                          {m.where} ↗
+                        </a>
+                      </>
+                    ))}
+                  </div>
+                )
+              }
             </div>
           </>
         );

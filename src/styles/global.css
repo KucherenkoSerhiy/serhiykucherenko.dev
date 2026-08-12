@@ -597,6 +597,24 @@ ul.plain {
   font-size: 0.78rem;
   margin-top: 0.25rem;
 }
+
+.tl-mirrors {
+  color: var(--dim);
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+}
+
+.tl-mirrors a {
+  /* .tl-body a is display:block for the main row; these stay inline */
+  display: inline;
+  color: var(--accent-dim);
+  text-decoration: none;
+}
+
+.tl-mirrors a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
 /* node shapes */
 .n-article {
   width: 12px;

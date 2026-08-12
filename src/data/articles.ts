@@ -4,8 +4,10 @@ export type Article = {
   date: string; // ISO, publication date
   title: string;
   metric: string; // the one real number that carries the piece
-  where: string; // platform label shown next to the link
+  where: string; // platform label shown next to the primary link
   url: string;
+  // Same piece, re-posted elsewhere. Canonical stays with `url`.
+  also?: { where: string; url: string }[];
 };
 
 export const articles: Article[] = [
@@ -22,6 +24,10 @@ export const articles: Article[] = [
     metric: '4.9 ms of 2,823 ms',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/three-small-lessons-from-building-rag-hand-serhiy-kucherenko-wgyce/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/three-small-lessons-from-building-a-rag-by-hand-43n0' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/three-small-lessons-from-building-a-rag-by-hand' },
+    ],
   },
   {
     date: '2026-07-24',
@@ -29,6 +35,10 @@ export const articles: Article[] = [
     metric: '6/10 → 9/10',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/when-60-recall-meant-90-accuracy-rag-measurement-story-kucherenko-aq8ue/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/when-60-recall-meant-90-accuracy-a-rag-measurement-story-ei0' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/when-60-recall-meant-90-accuracy-a-rag-measurement-story' },
+    ],
   },
   {
     date: '2026-07-17',
@@ -36,5 +46,9 @@ export const articles: Article[] = [
     metric: '10,137 ms → 27 ms',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/localhost-trap-10-second-database-connection-windows-kucherenko-1cm1e/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/the-localhost-trap-a-10-second-database-connection-on-windows-3le7' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/the-localhost-trap-a-10-second-database-connection-on-windows' },
+    ],
   },
 ];

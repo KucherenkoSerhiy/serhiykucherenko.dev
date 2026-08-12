@@ -12,6 +12,17 @@ export type Experiment = {
 
 export const experiments: Experiment[] = [
   {
+    question: "What does a standardised agent framework give you that a hand-rolled one doesn't?",
+    state: 'open',
+    context: 'adk-learning · a week inside Google ADK, having already built the roles-and-mentor version by hand',
+    finding:
+      'Day 1 of 7. So far the framework decides less than expected: routing lives in an English instruction, and the tools are ordinary functions that know nothing about agents. Whether that holds once delegation and memory arrive is the open part.',
+    evidence: {
+      label: 'the sprint repo',
+      url: 'https://github.com/KucherenkoSerhiy/adk-learning',
+    },
+  },
+  {
     question: 'What does hybrid search actually buy on a two-document corpus?',
     state: 'answered',
     context: 'payments-rag · recall stuck at 0.60',

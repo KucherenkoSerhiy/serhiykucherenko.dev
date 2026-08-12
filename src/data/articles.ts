@@ -10,6 +10,20 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    date: '2026-08-09',
+    title: 'The illusion of improvement',
+    metric: '495 → 484 chunks, 0.60 → 0.60',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/illusion-improvement-serhiy-kucherenko-vw20e/',
+  },
+  {
+    date: '2026-07-31',
+    title: 'Three small lessons from building a RAG by hand',
+    metric: '4.9 ms of 2,823 ms',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/three-small-lessons-from-building-rag-hand-serhiy-kucherenko-wgyce/',
+  },
+  {
     date: '2026-07-24',
     title: 'When 60% recall meant 90% accuracy: a RAG measurement story',
     metric: '6/10 → 9/10',

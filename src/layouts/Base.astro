@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
-import Backdrop from '../components/Backdrop.astro';
 import { SITE_TITLE, SITE_URL, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 
 interface Props {
@@ -53,7 +52,6 @@ const nav = [
     </script>
   </head>
   <body>
-    <Backdrop />
     <header class="site">
       <a class="brand" href="/">serhiykucherenko.dev</a>
       <nav>

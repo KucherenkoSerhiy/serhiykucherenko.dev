@@ -12,6 +12,17 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    date: '2026-08-14',
+    title: 'Judge strictly to avoid hallucinations',
+    metric: 'refusal 0 · fabrication 0',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/judge-strictly-avoid-hallucinations-serhiy-kucherenko-cjsye/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/judge-strictly-to-avoid-hallucinations-7kd' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/judge-strictly-to-avoid-hallucinations' },
+    ],
+  },
+  {
     date: '2026-08-09',
     title: 'The illusion of improvement',
     metric: '495 → 484 chunks, 0.60 → 0.60',

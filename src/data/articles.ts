@@ -45,17 +45,6 @@ export const articles: Article[] = [
     ],
   },
   {
-    date: '2026-08-04',
-    title: 'How to hurt yourself with AI',
-    metric: '1,948 words shipped, 65,930 read',
-    where: 'linkedin',
-    url: 'https://www.linkedin.com/pulse/how-hurt-yourself-ai-serhiy-kucherenko-ww5ce/',
-    also: [
-      { where: 'dev.to', url: 'https://dev.to/skucherenko/how-to-hurt-yourself-with-ai-4jp1' },
-      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/how-to-hurt-yourself-with-ai' },
-    ],
-  },
-  {
     date: '2026-07-31',
     title: 'Three small lessons from building a RAG by hand',
     metric: '4.9 ms of 2,823 ms',

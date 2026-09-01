@@ -17,6 +17,34 @@ export type Decision = {
   note?: string;
 };
 
+// PENDING: written and ready, but their files are not on GitHub yet (0019 has
+// uncommitted edits, 0020 is untracked). The site links every record to its
+// full text, so these go live only after the payments-rag repo is pushed.
+// Move them into `decisions` below at that point.
+export const pendingDecisions: Decision[] = [
+  {
+    id: '0020',
+    title: 'Restructure so the folder tree says what the system does',
+    date: '2026-08-31',
+    status: 'accepted',
+    chose: 'Packages named after the RAG loop itself: domain, indexing, retrieval, answering, adapters. The /ask use case extracted from the route so the CLI and any future entry point can reuse it.',
+    insteadOf: 'Leaving the orchestrator loose at the package root, a complete use case inside an HTTP route, and PDF extraction welded into the indexer.',
+    cost: 'Old import paths are gone, so anything external that reached into the package must update. No behavior changed, which is the point.',
+    file: '0020-screaming-architecture-restructure.md',
+  },
+  {
+    id: '0019',
+    title: 'Measure the frameworks, in quarantine',
+    date: '2026-08-27',
+    status: 'accepted',
+    chose: 'Haystack, LlamaIndex and LangChain/LangGraph comparators, built strictly inside the comparison harness, run isolated, scored by the same pipeline as everything else. Including the one framework this project famously rejected.',
+    insteadOf: 'Arguing about frameworks from their documentation, or quietly leaving LangChain out because ADR-0004 already had an opinion about it.',
+    cost: 'Three more adapters to maintain, and a standing reminder that the production no-framework stance is a claim the comparison could still embarrass.',
+    file: '0019-library-comparator-haystack-eval-only.md',
+    note: 'does not reopen 0004',
+  },
+];
+
 export const decisions: Decision[] = [
   {
     id: '0018',

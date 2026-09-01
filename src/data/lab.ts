@@ -16,7 +16,7 @@ export const experiments: Experiment[] = [
     state: 'open',
     context: 'adk-learning · a week inside Google ADK, having already built the roles-and-mentor version by hand',
     finding:
-      'Day 1 of 7. So far the framework decides less than expected: routing lives in an English instruction, and the tools are ordinary functions that know nothing about agents. Whether that holds once delegation and memory arrive is the open part.',
+      'Six of seven days in: single agent, pipeline, delegation, RAG grounding and cross-session memory all built and tested; the Cloud Run deploy is scripted but its live eval run sits blocked behind free-tier throttling. The framework still decides less than expected. The capstone, and the verdict, remain open.',
     evidence: {
       label: 'the sprint repo',
       url: 'https://github.com/KucherenkoSerhiy/adk-learning',

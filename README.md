@@ -1,41 +1,34 @@
 # serhiykucherenko.dev
 
-Personal site. Astro, MDX, plain CSS. Deployed on Cloudflare Pages.
+Personal site. Astro + MDX, plain CSS, no frameworks. Deployed as a Cloudflare Worker.
 
-## Add a blog post
+## Content model
 
-1. Create `src/content/blog/my-post.mdx` with this frontmatter:
+There are no hosted blog posts. Articles live where they were published (LinkedIn,
+dev.to, Hashnode); the site only lists and links out to them.
 
-   ```yaml
-   ---
-   title: "Post title"
-   description: "One-line summary, shows in lists and meta tags."
-   pubDate: 2026-07-24
-   tags: [rag, evals]
-   canonicalUrl: https://www.linkedin.com/pulse/...   # only for LinkedIn-first posts
-   ---
-   ```
-
-2. Write the body in Markdown below the frontmatter.
-3. Commit and push. Cloudflare Pages builds and deploys automatically.
-
-The filename becomes the URL: `my-post.mdx` → `/blog/my-post/`. Add `draft: true` to keep a post out of the build.
+- **Publish an article** → add one entry to `src/data/articles.ts`
+  (`{date, title, metric, where, url, also[]}`). `metric` is the one real number
+  that carries the piece. See the sync rule in `AGENTS.md` — a publish updates
+  three places or none.
+- **Ship something real** (a deploy, a launch, a milestone that isn't an article)
+  → add an entry to `src/data/shiplog.ts`. No invented metrics.
+- Other curated data: `src/data/lab.ts` (open questions), `decisions.ts` (ADRs),
+  `architecture.ts` (systems pages).
 
 ## Develop locally
 
 ```
 npm install
 npm run dev       # localhost:4321
-npm run build     # output in dist/
+npm run build     # output in dist/  — ALWAYS run this before pushing
 ```
 
 ## Deploy
 
-Cloudflare Pages, connected to this repo. Build command `npm run build`, output directory `dist`. Custom domain: serhiykucherenko.dev.
+Push to `main` = live. A Git-connected Cloudflare Worker (`serhiykucherenko-dev`,
+config in `wrangler.jsonc`) runs `npm run build` and deploys automatically.
+There is no staging — a broken push breaks production, so build locally first.
 
-## Pending TODOs
-
-- Add a portrait photo as `public/portrait.jpg` and uncomment the img in `src/pages/hire.astro`.
-- Set the real LinkedIn profile URL in `src/consts.ts`.
-- Add `canonicalUrl` to `src/content/blog/localhost-trap.mdx` once the LinkedIn article is live.
-- Add the payments-rag live demo URL in `src/pages/projects.astro` when it deploys.
+`worker/index.js` serves an ANSI business card to curl/wget/httpie on `/`;
+browsers get the static site from `dist/`.

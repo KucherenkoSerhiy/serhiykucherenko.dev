@@ -23,7 +23,7 @@ export const articles: Article[] = [
     ],
   },
   {
-    date: '2026-08-25',
+    date: '2026-08-21',
     title: 'How to hurt yourself with AI',
     metric: '65,930 → 1,948 words (34x)',
     where: 'linkedin',

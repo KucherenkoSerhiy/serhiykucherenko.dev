@@ -1,22 +1,59 @@
+# serhiykucherenko.dev — agent rules
+
+Personal site of Serhiy Kucherenko. Astro + MDX, plain CSS. These rules are
+canonical; `CLAUDE.md` just points here.
+
+## Deploy — no staging exists
+
+Push to `main` = live. A Git-connected Cloudflare Worker (`serhiykucherenko-dev`,
+`wrangler.jsonc`) builds (`npm run build`) and deploys on every push.
+**Always run `npm run build` locally before committing.** A broken push breaks
+production.
+
+`worker/index.js` intercepts `/` for terminal clients (curl/wget/httpie ANSI
+business card); everything else is the static build.
+
+## Content model
+
+Articles are LINK-OUTS — no article bodies on this site. One entry per piece in
+`src/data/articles.ts` `{date, title, metric, where, url, also[]}`. `metric` is
+the one real number that carries the piece. There is no `src/content/` and no
+hosted blog posts; `src/pages/blog/index.astro` renders the list.
+
+Other curated data, all hand-edited TypeScript:
+- `src/data/shiplog.ts` — real dated milestones that are NOT articles (deploys,
+  launches). Merged with articles on /blog. No invented metrics, ever.
+- `src/data/lab.ts` — open questions being tested for real (/lab)
+- `src/data/decisions.ts` — decision records (/decisions)
+- `src/data/architecture.ts` — systems pages (/systems)
+
+## Sync rule
+
+Any article publish updates three places or none:
+1. `C:\repos\article-writer\PUBLISHED.md` — master registry
+2. the piece's `FINAL.md` frontmatter — per-piece record
+3. `src/data/articles.ts` — this site
+
+Dates come from the platform byline (the LinkedIn article page shows the real
+publish date), not from memory or drafts.
+
+## Owner rules
+
+- Nothing publishes without owner sign-off. Agent prepares; owner clicks.
+- Facts over recollection: if owner memory and repo disagree, the repo (or the
+  live platform) wins — and tell the owner.
+- No credentials in any repo file, ever.
+- `TODO-SERHIY.md` tracks owner-only pending items. Keep it current; resolve or
+  drop items rather than working around them.
+
 ## Development
 
-When starting the dev server, use background mode:
+Dev server in background mode: `astro dev --background` (manage with
+`astro dev stop` / `status` / `logs`). Docs: https://docs.astro.build
 
-```
-astro dev --background
-```
+## Related
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
-
-## Documentation
-
-Full documentation: https://docs.astro.build
-
-Consult these guides before working on related tasks:
-
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+- Article shop: `C:\repos\article-writer` (pieces, briefs, PUBLISHED.md — not a
+  git repo)
+- Source project linked from the site: https://github.com/KucherenkoSerhiy/payments-rag,
+  live demo https://rag.serhiykucherenko.dev

@@ -12,6 +12,17 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    date: '2026-09-04',
+    title: 'Comparing RAGs, Part 1: the framework',
+    metric: '6 systems, 1 golden set',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/comparing-rags-part-1-framework-serhiy-kucherenko-tbdoe/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/comparing-rags-part-1-the-framework-e9p' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/comparing-rags-part-1-the-framework' },
+    ],
+  },
+  {
     date: '2026-08-25',
     title: 'How to hurt yourself with AI',
     metric: '65,930 → 1,948 words (34x)',

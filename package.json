@@ -7,9 +7,12 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/check-articles.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:articles": "node scripts/check-articles.mjs",
+    "sync:shop": "node scripts/check-articles.mjs && node scripts/render-published.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.3",

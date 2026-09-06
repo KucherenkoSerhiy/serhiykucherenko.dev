@@ -63,8 +63,7 @@ Dev server in background mode: `astro dev --background` (manage with
 
 ## Related
 
-- Article shop: `C:eposrticle-writer` (Paperclip company: agents, skills,
-  pieces, briefs; local git repo, no remote). Its README carries the shop's
-  operational state.
+- Article shop: `C:\repos\article-writer` (pieces, briefs, PUBLISHED.md — not a
+  git repo)
 - Source project linked from the site: https://github.com/KucherenkoSerhiy/payments-rag,
   live demo https://rag.serhiykucherenko.dev

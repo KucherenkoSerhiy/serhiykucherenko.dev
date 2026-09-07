@@ -12,6 +12,17 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    date: '2026-09-07',
+    title: 'Comparing RAGs, Part 2: the benchmark',
+    metric: '4th on accuracy, 1st on cost and speed',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/comparing-rags-part-2-benchmark-serhiy-kucherenko-kflse/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/comparing-rags-part-2-the-benchmark-d06' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/comparing-rags-part-2-the-benchmark' },
+    ],
+  },
+  {
     date: '2026-09-04',
     title: 'Comparing RAGs, Part 1: the framework',
     metric: '6 systems, 1 golden set',

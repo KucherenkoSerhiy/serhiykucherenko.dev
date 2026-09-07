@@ -13,6 +13,15 @@ export type Milestone = {
 
 export const milestones: Milestone[] = [
   {
+    date: '2026-09-07',
+    kind: 'ship',
+    title: 'Six-system RAG comparison harness',
+    sub: 'payments-rag vs file_search, NotebookLM, Haystack, LlamaIndex, LangChain · one adapter, one golden set',
+    metric: '6 systems · 10 questions',
+    metricTone: 'ok',
+    href: 'https://github.com/KucherenkoSerhiy/payments-rag',
+  },
+  {
     date: '2026-07-20',
     kind: 'ship',
     title: 'payments-rag demo went live',

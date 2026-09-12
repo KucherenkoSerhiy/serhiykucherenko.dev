@@ -12,6 +12,17 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    // LinkedIn version is scheduled; make it the primary url once it goes live.
+    date: '2026-09-12',
+    title: 'Improving the scores of a RAG',
+    metric: 'recall@5 0.60 → 0.80',
+    where: 'dev.to',
+    url: 'https://dev.to/skucherenko/improving-the-scores-of-a-rag-5049',
+    also: [
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/improving-the-scores-of-a-rag' },
+    ],
+  },
+  {
     date: '2026-09-07',
     title: 'Comparing RAGs, Part 2: the benchmark',
     metric: '4th on accuracy, 1st on cost and speed',

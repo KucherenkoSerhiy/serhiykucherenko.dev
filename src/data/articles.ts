@@ -12,6 +12,17 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    // LinkedIn pulse URL pending; make it the primary url once recorded.
+    date: '2026-09-14',
+    title: 'Swapping every model in a RAG',
+    metric: '66/80 outcomes identical across 6 model stacks',
+    where: 'dev.to',
+    url: 'https://dev.to/skucherenko/swapping-every-model-in-a-rag-5h8l',
+    also: [
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/swapping-every-model-in-a-rag' },
+    ],
+  },
+  {
     // LinkedIn version is scheduled; make it the primary url once it goes live.
     date: '2026-09-12',
     title: 'Improving the scores of a RAG',

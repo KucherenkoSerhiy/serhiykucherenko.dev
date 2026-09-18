@@ -12,6 +12,17 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    date: '2026-09-18',
+    title: 'Asking a RAG in the wrong language',
+    metric: 'hybrid search lost 2 to 3 answers in 20, in every language',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/when-using-rag-different-language-serhiy-kucherenko-it0ne/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/asking-a-rag-in-the-wrong-language-885' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/asking-a-rag-in-the-wrong-language' },
+    ],
+  },
+  {
     // LinkedIn pulse URL pending; make it the primary url once recorded.
     date: '2026-09-14',
     title: 'Swapping every model in a RAG',

@@ -12,6 +12,17 @@ export type Article = {
 
 export const articles: Article[] = [
   {
+    date: '2026-09-25',
+    title: 'The answer was at rank 7',
+    metric: 'the passage was at rank 7; the model only sees the top 5',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/when-answer-gets-filtered-out-serhiy-kucherenko-e41pe/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/the-answer-was-at-rank-7-2o81' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/the-answer-was-at-rank-7' },
+    ],
+  },
+  {
     date: '2026-09-18',
     title: 'Asking a RAG in the wrong language',
     metric: 'hybrid search lost 2 to 3 answers in 20, in every language',

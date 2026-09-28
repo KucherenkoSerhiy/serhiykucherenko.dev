@@ -16,16 +16,16 @@ const CARD = `
  ${D}┌─────────────────────────────────────────────────────────┐${R}
  ${D}│${R}                                                         ${D}│${R}
  ${D}│${R}   ${B}${A}Serhiy Kucherenko${R}                                     ${D}│${R}
- ${D}│${R}   software architect who builds AI systems              ${D}│${R}
+ ${D}│${R}   software engineer who builds AI systems               ${D}│${R}
  ${D}│${R}                                                         ${D}│${R}
- ${D}│${R}   .NET / banking (9y) ${D}──▶${R} ${A}AI systems${R} ${D}──▶${R} ${G}your system${R}    ${D}│${R}
+ ${D}│${R}   backend (10y) ${D}──▶${R} ${A}AI systems${R} ${D}──▶${R} ${G}your system${R}          ${D}│${R}
  ${D}│${R}                                                         ${D}│${R}
  ${D}│${R}   ${D}web${R}    https://serhiykucherenko.dev                  ${D}│${R}
  ${D}│${R}   ${D}demo${R}   https://rag.serhiykucherenko.dev              ${D}│${R}
  ${D}│${R}   ${D}code${R}   https://github.com/KucherenkoSerhiy           ${D}│${R}
  ${D}│${R}   ${D}mail${R}   kucherenkoserhiy@gmail.com                    ${D}│${R}
  ${D}│${R}                                                         ${D}│${R}
- ${D}│${R}   ${G}●${R} open to freelance ${D}· rag · llm cost · .net${R}          ${D}│${R}
+ ${D}│${R}   ${G}●${R} open to b2b and roles ${D}· evals · rag · agents${R}       ${D}│${R}
  ${D}│${R}                                                         ${D}│${R}
  ${D}└─────────────────────────────────────────────────────────┘${R}
    ${D}the browser version has diagrams. this one has you.${R}

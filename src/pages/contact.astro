@@ -63,6 +63,7 @@ const live = systems.filter((s) => s.state === 'live').length;
         the trade-offs.
       </p>
       <a href="/systems/">see how they are built →</a>
+      <a href="/cases/payments-rag/">read the payments-rag case study →</a>
     </div>
 
     <div class="pcard">
@@ -98,6 +99,9 @@ const live = systems.filter((s) => s.state === 'live').length;
     </div>
     <a class="btn" href={`mailto:${EMAIL}`}>✉ {EMAIL}</a>
   </div>
+  <p class="meta expect">
+    I reply within a day. A good first email names the role and the contract form.
+  </p>
   <p class="meta">
     <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">the code speaks too ↗</a>
   </p>
@@ -142,5 +146,12 @@ const live = systems.filter((s) => s.state === 'live').length;
   .avail {
     color: var(--ok);
     margin: 1.5rem 0 0.5rem;
+  }
+  .expect {
+    margin-top: 0.9rem;
+  }
+  .pcard a + a {
+    display: block;
+    margin-top: 0.3rem;
   }
 </style>

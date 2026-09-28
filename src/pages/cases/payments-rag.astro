@@ -1,0 +1,352 @@
+---
+// Case study: payments-rag. Every number here traces to job-pipeline/me/facts.md
+// section 3 and the article canonical-facts sheets it cites. Add nothing that
+// is not in those files.
+import Base from '../../layouts/Base.astro';
+import { articles } from '../../data/articles';
+
+const REPO = 'https://github.com/KucherenkoSerhiy/payments-rag';
+const ADR = `${REPO}/blob/main/docs/adr`;
+const DEMO = 'https://rag.serhiykucherenko.dev';
+
+const byTitle = (t: string) => articles.find((a) => a.title === t);
+const reading = [
+  'When 60% recall meant 90% accuracy: a RAG measurement story',
+  'The illusion of improvement',
+  'Judge strictly to avoid hallucinations',
+  'Comparing RAGs, Part 2: the benchmark',
+  'Improving the scores of a RAG',
+  'Swapping every model in a RAG',
+]
+  .map(byTitle)
+  .filter(Boolean);
+
+const changes = [
+  {
+    date: '2026-07-01',
+    what: 'Strip repeated headers and footers, chunk on sentence boundaries',
+    number: '495 → 484 chunks · recall unchanged',
+    verdict: 'kept for cleanliness; the prediction that it would help is recorded as wrong',
+    adr: '0009-boilerplate-and-sentence-chunking.md',
+    tone: 'no',
+  },
+  {
+    date: '2026-07-04',
+    what: 'Hybrid search: vector plus keyword, rank fusion',
+    number: '0.60 → 0.60',
+    verdict: 'no lift on a two-document corpus; not adopted',
+    adr: '0014-improve-retrieval-rerank-hybrid.md',
+    tone: 'no',
+  },
+  {
+    date: '2026-07-09',
+    what: 'Reranker, an LLM used as a cross-encoder',
+    number: '0.60 → 0.70 · about a minute per query',
+    verdict: 'promotes only what was already fetched; kept in the eval, out of the live path',
+    adr: '0016-reranker-llm-cross-encoder-eval-only.md',
+    tone: 'no',
+  },
+  {
+    date: '2026-09-02',
+    what: 'Multi-query: rewrite the question three ways, fuse the results',
+    number: '0.50 and 0.70 on identical runs · 0.60 with temperature pinned',
+    verdict: 'a dice roll, then the baseline with one hit swapped for another; not shipped',
+    adr: '0022-multi-query-retrieval-eval-first.md',
+    tone: 'no',
+  },
+  {
+    date: '2026-09-02',
+    what: 'Contextual retrieval: a short blurb per chunk, embedded with it',
+    number: '0.60 → 0.80 · one-time re-index, about $0.5',
+    verdict: 'strictly additive, zero query-time cost; shipped',
+    adr: '0023-contextual-retrieval.md',
+    tone: 'yes',
+  },
+];
+---
+
+<Base
+  title="Case study: payments-rag"
+  description="A RAG that cites the page it answered from, measured until the number moved. Recall@5 0.60 to 0.80, cheapest of six systems compared, stable across six model stacks."
+>
+  <p class="eyebrow" style="margin-bottom:0.35rem;">
+    case study · payments-rag · <span class="indep">independent system, no commercial client</span>
+  </p>
+  <h1>A RAG that cites the page, measured until the number moved</h1>
+  <p class="lede">
+    Ask the SEPA rulebooks a question in plain English and get a short answer with the page it came
+    from. Built from scratch, without a framework, and then used as the bench for every retrieval
+    technique that came after. Most of them lost.
+  </p>
+
+  <div class="bignums">
+    <div class="bn"><span class="v">0.60 → 0.80</span><span class="l">recall@5, before and after</span></div>
+    <div class="bn"><span class="v">10 / 10</span><span class="l">answers passing a cross-vendor judge</span></div>
+    <div class="bn"><span class="v">1st on cost, 1st on speed</span><span class="l">of six RAG systems on one golden set</span></div>
+    <div class="bn"><span class="v">66 / 80</span><span class="l">outcomes identical across six model stacks</span></div>
+  </div>
+
+  <section>
+    <p class="eyebrow">context</p>
+    <p>
+      Payments engineers read the European Payments Council rulebooks for SEPA Credit Transfer and
+      SCT Inst. The documents are long, formal, and the answer to a practical question is usually one
+      sentence on one page. The system indexes the two 2025 rulebooks and answers with that sentence's
+      page, or says it cannot.
+    </p>
+    <ul class="plain rules">
+      <li><b>Cite or refuse.</b> Citations come back as data, never as markers in prose, so a made-up one fails loudly instead of rendering a wrong link. Chunks never span two pages for the same reason.</li>
+      <li><b>Cheap tier by default.</b> The small embedding model and the small generator, with the model name behind config so the quality question stays measurable instead of argued.</li>
+      <li><b>No framework.</b> Five fixed steps written by hand: embed, search, prompt, call, parse. Every step is legible, and every step can be timed on its own.</li>
+    </ul>
+    <p class="meta">python · fastapi · angular · postgres + pgvector on neon · claude answers, gpt judges · fly.io behind cloudflare</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">the measurement</p>
+    <p>
+      Ten questions with known answers live in the repo as a YAML file, so editing them to flatter a
+      number shows up in review. Two numbers come out of every run: recall@5 at the retriever, which
+      asks whether the answer page reached the top five, and a 0 to 100 score at the answer, graded by
+      a model from a different vendor than the one that wrote it.
+    </p>
+    <p>
+      The baseline was recall@5 0.60. The single answer the judge scored zero traced to one retrieval
+      miss: the page ranked first when the question used the spec's own wording and ninth when it
+      was asked casually. That trace set the direction for everything below.
+    </p>
+  </section>
+
+  <section>
+    <p class="eyebrow">what changed, in order</p>
+    <div class="tscroll">
+      <table class="changes">
+        <thead>
+          <tr><th>date</th><th>change</th><th>the number</th><th>verdict</th></tr>
+        </thead>
+        <tbody>
+          {
+            changes.map((c) => (
+              <tr class={`t-${c.tone}`}>
+                <td class="d">{c.date}</td>
+                <td>{c.what}</td>
+                <td class="n">{c.number}</td>
+                <td>
+                  {c.verdict}
+                  &#32;<a class="adr" href={`${ADR}/${c.adr}`} target="_blank" rel="noopener noreferrer">record ↗</a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="meta">
+      Four techniques built, one adopted. The other four are still in the repo, runnable from the eval,
+      so the "no" can be re-checked when the corpus changes.
+    </p>
+  </section>
+
+  <section>
+    <p class="eyebrow">results</p>
+    <dl class="results">
+      <dt>Retrieval</dt>
+      <dd>Recall@5 0.80, eight of ten questions with the answer page in the top five. Vector search itself is 17.3 ms of a 2,189 ms query; the embedding call is most of the rest.</dd>
+      <dt>Answers</dt>
+      <dd>Mean 96.3 of 100 from the cross-vendor judge, ten of ten above the pass bar of 70.</dd>
+      <dt>Against five other systems</dt>
+      <dd>Same ten questions, same scorer, six systems including OpenAI file search, NotebookLM, Haystack, LlamaIndex and LangChain. This one was the cheapest and the fastest, about three cents for the whole run at 2.68 s mean latency, and fourth on judge accuracy. Faithfulness 0.991.</dd>
+      <dt>Across six model stacks</dt>
+      <dd>A frozen pipeline with only the models swapped, 100 questions over four topics, three judges from three vendors. 66 of 80 answerable questions came out the same on every stack. All six refused every unanswerable question. Swapping the embedder moved scores more than swapping the generator. Whole experiment: $11.56.</dd>
+    </dl>
+  </section>
+
+  <section class="handoff">
+    <p class="eyebrow">handoff</p>
+    <p>
+      This is an independent system with no commercial client. Nobody paid for it and nobody's
+      operations depend on it. It exists to be measured, and the measurements are public.
+    </p>
+    <p>What a team would inherit:</p>
+    <ul class="plain">
+      <li>The public repo, with the golden set and the eval as first-class code, not a notebook.</li>
+      <li>23 decision records, each naming the alternative that lost and what the choice costs. <a href="/decisions/">read them →</a></li>
+      <li>A live demo behind rate limits and a daily spend cap. <a href={DEMO} target="_blank" rel="noopener noreferrer">try it ↗</a></li>
+      <li>Every number above traced to a run artifact in the repo, and a written record of the two predictions that were wrong.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="eyebrow">the write-ups, in order</p>
+    <ol class="reading">
+      {
+        reading.map((a) => (
+          <li>
+            <a href={a!.url} target="_blank" rel="noopener noreferrer">{a!.title} ↗</a>
+            <span class="rm">{a!.metric}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <p class="meta links">
+    <a href={DEMO} target="_blank" rel="noopener noreferrer">run demo ↗</a> ·
+    <a href={REPO} target="_blank" rel="noopener noreferrer">source ↗</a> ·
+    <a href="/systems/payments-rag/">how it is put together →</a> ·
+    <a href="/contact/">contact →</a>
+  </p>
+</Base>
+
+<style>
+  .indep {
+    color: var(--ok);
+  }
+  .lede {
+    max-width: 62ch;
+    margin-top: 0.3rem;
+  }
+  .bignums {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin: 1.5rem 0 2rem;
+  }
+  @media (max-width: 720px) {
+    .bignums {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .bn {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.8rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .bn .v {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .bn .l {
+    color: var(--dim);
+    font-size: 0.78rem;
+  }
+  section {
+    margin: 2rem 0;
+  }
+  section p {
+    max-width: 66ch;
+  }
+  .rules li {
+    margin-bottom: 0.5rem;
+    max-width: 66ch;
+  }
+  .rules b {
+    color: var(--bright);
+  }
+  .tscroll {
+    overflow-x: auto;
+  }
+  .changes {
+    width: 100%;
+    table-layout: fixed;
+    font-size: 0.86rem;
+  }
+  .changes td {
+    vertical-align: top;
+  }
+  .changes th {
+    color: var(--dim);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.7rem;
+  }
+  .changes td.d {
+    white-space: nowrap;
+    color: var(--dim);
+  }
+  .changes th:nth-child(1) {
+    width: 11%;
+  }
+  .changes th:nth-child(2) {
+    width: 32%;
+  }
+  .changes th:nth-child(3) {
+    width: 24%;
+  }
+  .changes td.n {
+    color: var(--accent);
+  }
+  @media (max-width: 720px) {
+    .changes thead {
+      display: none;
+    }
+    .changes,
+    .changes tbody,
+    .changes tr,
+    .changes td {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .changes tr {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      margin-bottom: 0.7rem;
+      padding: 0.5rem 0.2rem;
+    }
+    .changes td {
+      border: none;
+      padding: 0.2rem 0.6rem;
+    }
+    .changes td.d {
+      font-size: 0.75rem;
+    }
+  }
+  .changes tr.t-yes td.n {
+    color: var(--ok);
+  }
+  .changes .adr {
+    color: var(--dim);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  .results dt {
+    color: var(--bright);
+    font-weight: 700;
+    margin-top: 0.9rem;
+  }
+  .results dd {
+    margin: 0.25rem 0 0;
+    max-width: 66ch;
+  }
+  .handoff {
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 1rem 1.15rem;
+  }
+  .handoff .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+  .handoff li {
+    margin-bottom: 0.35rem;
+  }
+  .reading {
+    padding-left: 1.2rem;
+  }
+  .reading li {
+    margin-bottom: 0.45rem;
+  }
+  .reading .rm {
+    display: block;
+    color: var(--accent-dim);
+    font-size: 0.8rem;
+  }
+  .links {
+    margin-top: 2rem;
+  }
+</style>

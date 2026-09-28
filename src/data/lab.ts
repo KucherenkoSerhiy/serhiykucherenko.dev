@@ -16,7 +16,7 @@ export const experiments: Experiment[] = [
     state: 'open',
     context: 'adk-learning · a week inside Google ADK, having already built the roles-and-mentor version by hand',
     finding:
-      'Six of seven days in: single agent, pipeline, delegation, RAG grounding and cross-session memory all built and tested; the Cloud Run deploy is scripted but its live eval run sits blocked behind free-tier throttling. The framework still decides less than expected. The capstone, and the verdict, remain open.',
+      'All seven days built and tested: single agent, pipeline, delegation, RAG grounding, cross-session memory, deploy with evaluation, governance capstone. The short version: the framework decided less than expected, and the hand-rolled version had already made most of the same choices. The two-part write-up is drafted, not yet published, so the verdict stays open here until it is.',
     evidence: {
       label: 'the sprint repo',
       url: 'https://github.com/KucherenkoSerhiy/adk-learning',

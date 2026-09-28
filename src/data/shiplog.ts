@@ -13,6 +13,15 @@ export type Milestone = {
 
 export const milestones: Milestone[] = [
   {
+    date: '2026-09-09',
+    kind: 'ship',
+    title: 'oncall-triage went live',
+    sub: 'triage.serhiykucherenko.dev · three bank estates feeding one ADK triage agent · aws · azure · kubernetes + kafka',
+    metric: '3 estates → 1 brain',
+    metricTone: 'ok',
+    href: 'https://triage.serhiykucherenko.dev',
+  },
+  {
     date: '2026-09-07',
     kind: 'ship',
     title: 'Six-system RAG comparison harness',

@@ -8,12 +8,24 @@ export type Article = {
   url: string;
   // Same piece, re-posted elsewhere. Canonical stays with `url`.
   also?: { where: string; url: string }[];
+  // The thread a piece belongs to. Shown as a label; groups the start-here picks.
+  series?: Series;
 };
+
+export type Series = 'measuring a rag' | 'judging answers' | 'comparing rags' | 'working with ai';
+
+// Three doors for a first-time reader, one per thread that matters. Titles must match entries below.
+export const startHere: { title: string; why: string }[] = [
+  { title: 'When 60% recall meant 90% accuracy: a RAG measurement story', why: 'how the measuring started' },
+  { title: 'Judge strictly to avoid hallucinations', why: 'the eval that keeps it honest' },
+  { title: 'Comparing RAGs, Part 2: the benchmark', why: 'the hand-built one against five others' },
+];
 
 export const articles: Article[] = [
   {
     date: '2026-09-25',
     title: 'The answer was at rank 7',
+    series: 'measuring a rag',
     metric: 'the passage was at rank 7; the model only sees the top 5',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/when-answer-gets-filtered-out-serhiy-kucherenko-e41pe/',
@@ -25,6 +37,7 @@ export const articles: Article[] = [
   {
     date: '2026-09-18',
     title: 'Asking a RAG in the wrong language',
+    series: 'measuring a rag',
     metric: 'hybrid search lost 2 to 3 answers in 20, in every language',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/when-using-rag-different-language-serhiy-kucherenko-it0ne/',
@@ -37,6 +50,7 @@ export const articles: Article[] = [
     // LinkedIn pulse URL pending; make it the primary url once recorded.
     date: '2026-09-14',
     title: 'Swapping every model in a RAG',
+    series: 'judging answers',
     metric: '66/80 outcomes identical across 6 model stacks',
     where: 'dev.to',
     url: 'https://dev.to/skucherenko/swapping-every-model-in-a-rag-5h8l',
@@ -48,6 +62,7 @@ export const articles: Article[] = [
     // LinkedIn version is scheduled; make it the primary url once it goes live.
     date: '2026-09-12',
     title: 'Improving the scores of a RAG',
+    series: 'measuring a rag',
     metric: 'recall@5 0.60 → 0.80',
     where: 'dev.to',
     url: 'https://dev.to/skucherenko/improving-the-scores-of-a-rag-5049',
@@ -58,6 +73,7 @@ export const articles: Article[] = [
   {
     date: '2026-09-07',
     title: 'Comparing RAGs, Part 2: the benchmark',
+    series: 'comparing rags',
     metric: '4th on accuracy, 1st on cost and speed',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/comparing-rags-part-2-benchmark-serhiy-kucherenko-kflse/',
@@ -69,6 +85,7 @@ export const articles: Article[] = [
   {
     date: '2026-09-04',
     title: 'Comparing RAGs, Part 1: the framework',
+    series: 'comparing rags',
     metric: '6 systems, 1 golden set',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/comparing-rags-part-1-framework-serhiy-kucherenko-tbdoe/',
@@ -80,6 +97,7 @@ export const articles: Article[] = [
   {
     date: '2026-08-21',
     title: 'How to hurt yourself with AI',
+    series: 'working with ai',
     metric: '65,930 → 1,948 words (34x)',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/how-hurt-yourself-ai-serhiy-kucherenko-ww5ce/',
@@ -91,6 +109,7 @@ export const articles: Article[] = [
   {
     date: '2026-08-14',
     title: 'Judge strictly to avoid hallucinations',
+    series: 'judging answers',
     metric: 'refusal 0 · fabrication 0',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/judge-strictly-avoid-hallucinations-serhiy-kucherenko-cjsye/',
@@ -102,6 +121,7 @@ export const articles: Article[] = [
   {
     date: '2026-08-09',
     title: 'The illusion of improvement',
+    series: 'measuring a rag',
     metric: '495 → 484 chunks, 0.60 → 0.60',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/illusion-improvement-serhiy-kucherenko-vw20e/',
@@ -113,6 +133,7 @@ export const articles: Article[] = [
   {
     date: '2026-07-31',
     title: 'Three small lessons from building a RAG by hand',
+    series: 'measuring a rag',
     metric: '4.9 ms of 2,823 ms',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/three-small-lessons-from-building-rag-hand-serhiy-kucherenko-wgyce/',
@@ -124,6 +145,7 @@ export const articles: Article[] = [
   {
     date: '2026-07-24',
     title: 'When 60% recall meant 90% accuracy: a RAG measurement story',
+    series: 'measuring a rag',
     metric: '6/10 → 9/10',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/when-60-recall-meant-90-accuracy-rag-measurement-story-kucherenko-aq8ue/',
@@ -135,6 +157,7 @@ export const articles: Article[] = [
   {
     date: '2026-07-17',
     title: 'The localhost trap: a 10-second database connection on Windows',
+    series: 'working with ai',
     metric: '10,137 ms → 27 ms',
     where: 'linkedin',
     url: 'https://www.linkedin.com/pulse/localhost-trap-10-second-database-connection-windows-kucherenko-1cm1e/',

@@ -16,15 +16,20 @@ const parts = (latest?.metric ?? '').split('→').map((s) => s.trim());
       '@type': 'Person',
       name: 'Serhiy Kucherenko',
       url: 'https://serhiykucherenko.dev',
-      jobTitle: 'Senior fullstack engineer',
+      jobTitle: 'Software engineer who builds AI systems',
+      address: { '@type': 'PostalAddress', addressLocality: 'Barcelona', addressCountry: 'ES' },
       knowsAbout: ['RAG systems', 'LLM evaluation', 'AI agents', 'Python', 'TypeScript', 'SEPA payments', 'ISO 20022', '.NET'],
-      sameAs: ['https://github.com/KucherenkoSerhiy'],
+      sameAs: ['https://github.com/KucherenkoSerhiy', 'https://www.linkedin.com/in/serhiy-kucherenko/'],
     })}
   />
 
   <section class="hero">
     <div class="hero-inner">
-      <h1 class="sr-only">Serhiy Kucherenko — fullstack engineer building AI systems from scratch</h1>
+
+      <h1 class="who">
+        Serhiy Kucherenko <span class="sep">·</span> software engineer who builds AI systems
+        <span class="sep">·</span> <span class="where">Barcelona, relocating to Warsaw</span>
+      </h1>
 
       <p class="eyebrow">fig.0 — the operator</p>
       <div class="opmap">
@@ -35,7 +40,7 @@ const parts = (latest?.metric ?? '').split('→').map((s) => s.trim());
         <div class="op-link"></div>
         <div class="op-node now">
           <div class="t">AI systems, from scratch</div>
-          <div class="s">rag · evals · citations · cost</div>
+          <div class="s">evals · rag · agents · cost</div>
         </div>
         <div class="op-link"></div>
         <div class="op-node next">
@@ -47,7 +52,9 @@ const parts = (latest?.metric ?? '').split('→').map((s) => s.trim());
       {
         latest && (
           <>
-            <p class="eyebrow" style="margin-top:2rem;">latest · {latest.date}</p>
+            <p class="eyebrow" style="margin-top:2rem;">
+              latest · {latest.date} · {articles.length} articles, weekly since jul 2026
+            </p>
             <a href={latest.url} target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
               <div class="metricline">
                 {parts.length === 2 ? (
@@ -72,7 +79,7 @@ const parts = (latest?.metric ?? '').split('→').map((s) => s.trim());
       <div class="doors">
         <a class="door" href="/contact/">
           <span class="cmd">&gt; contact</span>
-          <span class="sub">rag · agents · evals · llm cost control</span>
+          <span class="sub">evals · rag · agents · llm cost control</span>
         </a>
         <a class="door" href="/lab/">
           <span class="cmd">&gt; cd lab/</span>
@@ -84,15 +91,18 @@ const parts = (latest?.metric ?? '').split('→').map((s) => s.trim());
 </Base>
 
 <style>
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  .who {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--fg);
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
   }
-  .hero-inner .eyebrow:first-of-type {
-    margin-top: 0;
+  .who .sep {
+    color: var(--dim);
+    margin: 0 0.2rem;
+  }
+  .who .where {
+    color: var(--dim);
   }
 </style>

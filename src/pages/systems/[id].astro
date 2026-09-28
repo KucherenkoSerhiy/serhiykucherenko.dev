@@ -38,8 +38,13 @@ const detail = details[system.id as SystemId];
                   <span class="stop-why">
                     {stop.why}
                     {stop.adr && (
-                      <a href="/decisions/" class="stop-adr">
+                      <a
+                        href={stop.adrHref ?? '/decisions/'}
+                        class="stop-adr"
+                        {...(stop.adrHref ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      >
                         ADR-{stop.adr}
+                        {stop.adrHref ? ' ↗' : ''}
                       </a>
                     )}
                   </span>

@@ -3,9 +3,12 @@ import Base from '../layouts/Base.astro';
 import { EMAIL, GITHUB_URL } from '../consts';
 import { decisions } from '../data/decisions';
 import { experiments } from '../data/lab';
+import { articles } from '../data/articles';
+import { systems } from '../data/architecture';
 
 const answered = experiments.filter((e) => e.state === 'answered').length;
 const open = experiments.filter((e) => e.state === 'open').length;
+const live = systems.filter((s) => s.state === 'live').length;
 ---
 
 <Base
@@ -16,15 +19,20 @@ const open = experiments.filter((e) => e.state === 'open').length;
     <img src="/portrait.jpg" alt="Serhiy Kucherenko" width="64" height="64" loading="lazy" />
     <div>
       <h1 style="margin:0;font-size:1.3rem;">Contact</h1>
-      <div class="meta">remote · Barcelona</div>
+      <div class="meta">remote · Barcelona, relocating to Warsaw</div>
     </div>
   </div>
 
   <section class="claim">
     <h2>Software engineer who builds AI systems</h2>
     <p>
-      Ten years of production software across banking, medical, industrial, travel and invoicing,
-      and internal tooling. Regulated and not. Two-person teams and large orgs.
+      Ten years of production software: Barberan, Newshore, Voxel (an Amadeus company), Materialise,
+      Hitachi Energy, and Wizeline for a tier-1 US bank. Industrial, travel, invoicing, medical,
+      banking. Regulated and not. Two-person teams and large orgs.
+    </p>
+    <p>
+      Architecture as practice, not a title: C4 diagrams, Backstage docs and decisions taken across
+      several teams at Wizeline; systems designed and owned from nothing at Voxel and Barberan.
     </p>
     <p>
       The through-line is domains where being wrong has consequences: a wrong payment, a wrong
@@ -41,16 +49,18 @@ const open = experiments.filter((e) => e.state === 'open').length;
       <span class="pnum">{decisions.length} decision records</span>
       <p>
         Each one names the alternative that lost and the price of the one that won. Including
-        the prediction that measurement proved wrong.
+        the predictions that measurement proved wrong. Those are payments-rag; oncall-triage keeps
+        17 more in its repo.
       </p>
       <a href="/decisions/">read the decisions →</a>
     </div>
 
     <div class="pcard">
-      <span class="pnum">2 systems running</span>
+      <span class="pnum">{live} systems running</span>
       <p>
-        A retriever that cites the page it answered from, and this site. Both live, both
-        documented down to the trade-offs.
+        A retriever that cites the page it answered from, an alert-triage agent fed by three cloud
+        estates, a browser extension on the store, and this site. All live, all documented down to
+        the trade-offs.
       </p>
       <a href="/systems/">see how they are built →</a>
     </div>
@@ -69,15 +79,22 @@ const open = experiments.filter((e) => e.state === 'open').length;
     <p class="eyebrow">where the edges are</p>
     <ul class="plain">
       <li>I build systems around models. I do not train them.</li>
-      <li>AI experience is measured in weeks. The judgment it rests on is measured in years.</li>
+      <li>
+        AI experience is three months: {articles.length} articles, two systems in production, one
+        extension on the store. The judgment it rests on is ten years.
+      </li>
       <li>Large-scale distributed AI infrastructure is not something I have demonstrated.</li>
     </ul>
   </section>
 
+  <p class="eyebrow avail">open to B2B engagements and roles · start within a week of signing</p>
   <div class="cta">
     <div class="ask">
       <div class="l1">Write me a paragraph about the problem.</div>
-      <div class="l2">If I can't help, I'll say so.</div>
+      <div class="l2">
+        Best fit: an LLM feature that has to be right, shipped or about to be. If I can't help, I'll
+        say so.
+      </div>
     </div>
     <a class="btn" href={`mailto:${EMAIL}`}>✉ {EMAIL}</a>
   </div>
@@ -121,5 +138,9 @@ const open = experiments.filter((e) => e.state === 'open').length;
   }
   .edges li {
     margin-bottom: 0.35rem;
+  }
+  .avail {
+    color: var(--ok);
+    margin: 1.5rem 0 0.5rem;
   }
 </style>

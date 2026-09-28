@@ -17,11 +17,37 @@ export type Decision = {
   note?: string;
 };
 
-// PENDING: written and ready, but their files are not on GitHub yet (0019 has
-// uncommitted edits, 0020 is untracked). The site links every record to its
-// full text, so these go live only after the payments-rag repo is pushed.
-// Move them into `decisions` below at that point.
-export const pendingDecisions: Decision[] = [
+export const decisions: Decision[] = [
+  {
+    id: '0023',
+    title: 'Contextual retrieval: situate each chunk before embedding it',
+    date: '2026-09-02',
+    status: 'accepted',
+    chose: 'One model call per page writes a short blurb for every chunk, and blurb plus chunk embed together. The stored text stays the verbatim passage, so citations do not change.',
+    insteadOf: 'Rewriting the question at query time, which had just been measured and traded one hit for another.',
+    cost: 'A one-time re-index at roughly half a dollar for 484 chunks. Recall@5 went 0.60 to 0.80 with zero query-time cost, which is what the reranker could not do.',
+    file: '0023-contextual-retrieval.md',
+  },
+  {
+    id: '0022',
+    title: 'Multi-query retrieval, measured first and left out of the live path',
+    date: '2026-09-02',
+    status: 'measured-wrong',
+    chose: 'Rephrase the question three ways in spec vocabulary, retrieve for each, fuse the lists. Exposed in the eval only.',
+    insteadOf: 'Shipping it on the strength of the playbook that ranked it high on leverage and low on cost.',
+    cost: 'At default temperature recall was a dice roll, 0.50 to 0.70 on identical runs. Pinned to zero it was 0.60, the baseline, with one question gained and one lost. Recorded as the miss it was.',
+    file: '0022-multi-query-retrieval-eval-first.md',
+  },
+  {
+    id: '0021',
+    title: 'Model matrix: freeze the pipeline, vary only the models',
+    date: '2026-09-01',
+    status: 'accepted',
+    chose: 'One hand-rolled pipeline, six embedder and generator combinations, four topics, three judges from three vendors, every answer scored by all three and never averaged across judges.',
+    insteadOf: 'Adding vendor SDKs, or letting the new corpora anywhere near the production index.',
+    cost: 'Three eval-only providers reached through OpenAI-compatible endpoints, corpus content fetched locally and never committed. Production untouched, by construction.',
+    file: '0021-model-matrix-eval-only.md',
+  },
   {
     id: '0020',
     title: 'Restructure so the folder tree says what the system does',
@@ -43,9 +69,6 @@ export const pendingDecisions: Decision[] = [
     file: '0019-library-comparator-haystack-eval-only.md',
     note: 'does not reopen 0004',
   },
-];
-
-export const decisions: Decision[] = [
   {
     id: '0018',
     title: 'Public deploy on Fly and Neon, with no login',

@@ -177,6 +177,20 @@ const changes = [
   </section>
 
   <section>
+    <p class="eyebrow">four questions a recruiter asked, answered straight</p>
+    <dl class="qa">
+      <dt>Were payments-rag and oncall-triage built for commercial clients?</dt>
+      <dd>No. Both are independent projects, built and run by me, with no client behind them. That is what makes every number on this page publishable.</dd>
+      <dt>Do they have real users, and at what scale?</dt>
+      <dd>payments-rag is a public demo behind rate limits and a daily spend cap, with no accounts, so there is no user count to quote; readers of the article series try it. oncall-triage triages synthetic alerts from a fictional bank; its users are me and the people reviewing it. tab-librarian is on the Chrome Web Store and in my own daily use. Nobody's operations depend on any of them.</dd>
+      <dt>Any commercial LLM or agent work before July 2026?</dt>
+      <dd>No. Ten years of production software before that, none of it with language models. The AI work starts in July 2026 and everything it produced is linked from this site.</dd>
+      <dt>Interested in a hands-on individual contributor role building production AI systems in Python?</dt>
+      <dd>Yes. That is the work I have been doing since July and the work I want: building, measuring, and owning the system in production. The Python is three months old in production; the judgment under it is ten years old.</dd>
+    </dl>
+  </section>
+
+  <section>
     <p class="eyebrow">the write-ups, in order</p>
     <ol class="reading">
       {
@@ -334,6 +348,16 @@ const changes = [
   }
   .handoff li {
     margin-bottom: 0.35rem;
+  }
+  .qa dt {
+    color: var(--bright);
+    font-weight: 700;
+    margin-top: 0.9rem;
+    max-width: 66ch;
+  }
+  .qa dd {
+    margin: 0.25rem 0 0;
+    max-width: 66ch;
   }
   .reading {
     padding-left: 1.2rem;

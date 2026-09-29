@@ -97,7 +97,10 @@ const live = systems.filter((s) => s.state === 'live').length;
         say so.
       </div>
     </div>
-    <a class="btn" href={`mailto:${EMAIL}`}>✉ {EMAIL}</a>
+    <div class="ways">
+      <a class="btn" href={`mailto:${EMAIL}`}>✉ {EMAIL}</a>
+      <a class="call" href="https://cal.com/serhiy-kucherenko-jbdr6r/30min" target="_blank" rel="noopener noreferrer">or book 30 minutes ↗</a>
+    </div>
   </div>
   <p class="meta expect">
     I reply within a day. A good first email names the role and the contract form.
@@ -149,6 +152,24 @@ const live = systems.filter((s) => s.state === 'live').length;
   }
   .expect {
     margin-top: 0.9rem;
+  }
+  .ways {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.45rem;
+  }
+  .ways .call {
+    font-size: 0.85rem;
+    color: var(--dim);
+  }
+  .ways .call:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 640px) {
+    .ways {
+      align-items: flex-start;
+    }
   }
   .pcard a + a {
     display: block;

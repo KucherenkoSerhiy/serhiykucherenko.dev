@@ -23,6 +23,18 @@ export const startHere: { title: string; why: string }[] = [
 
 export const articles: Article[] = [
   {
+    date: '2026-10-02',
+    title: 'The same question, asked three ways',
+    series: 'measuring a rag',
+    metric: 'same answer page: rank 2, 46 and 10 depending on the wording',
+    where: 'linkedin',
+    url: 'https://www.linkedin.com/pulse/same-question-asked-three-ways-serhiy-kucherenko-d0age/',
+    also: [
+      { where: 'dev.to', url: 'https://dev.to/skucherenko/the-same-question-asked-three-ways-1c8c' },
+      { where: 'hashnode', url: 'https://skucherenko.hashnode.dev/the-same-question-asked-three-ways' },
+    ],
+  },
+  {
     date: '2026-09-25',
     title: 'The answer was at rank 7',
     series: 'measuring a rag',
